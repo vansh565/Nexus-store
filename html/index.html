@@ -71,57 +71,16 @@
             animation: float 6s infinite ease-in-out;
         }
 
-        .particle:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-            animation-duration: 8s;
-        }
-
-        .particle:nth-child(2) {
-            top: 60%;
-            left: 80%;
-            animation-delay: 2s;
-            animation-duration: 6s;
-        }
-
-        .particle:nth-child(3) {
-            top: 40%;
-            left: 60%;
-            animation-delay: 4s;
-            animation-duration: 10s;
-        }
-
-        .particle:nth-child(4) {
-            top: 80%;
-            left: 20%;
-            animation-delay: 1s;
-            animation-duration: 7s;
-        }
-
-        .particle:nth-child(5) {
-            top: 30%;
-            left: 90%;
-            animation-delay: 3s;
-            animation-duration: 9s;
-        }
-
-        .particle:nth-child(6) {
-            top: 70%;
-            left: 40%;
-            animation-delay: 5s;
-            animation-duration: 8s;
-        }
+        .particle:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; animation-duration: 8s; }
+        .particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; animation-duration: 6s; }
+        .particle:nth-child(3) { top: 40%; left: 60%; animation-delay: 4s; animation-duration: 10s; }
+        .particle:nth-child(4) { top: 80%; left: 20%; animation-delay: 1s; animation-duration: 7s; }
+        .particle:nth-child(5) { top: 30%; left: 90%; animation-delay: 3s; animation-duration: 9s; }
+        .particle:nth-child(6) { top: 70%; left: 40%; animation-delay: 5s; animation-duration: 8s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(-20px) rotate(180deg);
-                opacity: 1;
-            }
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
         }
 
         /* Navigation */
@@ -166,6 +125,27 @@
             align-items: center;
         }
 
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .nav-buttons.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         /* Buttons */
         .btn-primary, .btn-secondary, .btn-cta, .btn-ghost, .btn-submit {
             padding: 0.75rem 1.5rem;
@@ -188,6 +168,11 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active, .btn-secondary:active, .btn-ghost:active, .btn-submit:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .btn-secondary {
@@ -219,7 +204,7 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
         }
-        
+
         .btn-cta:active {
             transform: translateY(1px);
             box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
@@ -478,6 +463,25 @@
             color: rgba(255, 255, 255, 0.4);
         }
 
+        .checkbox-label input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked {
+            background: #6366f1;
+            border-color: #6366f1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.2l-3.5-3.5L4 14.2l5 5L20 8.2l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E");
+            background-size: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
         .form-options {
             display: flex;
             justify-content: space-between;
@@ -493,11 +497,6 @@
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
             cursor: pointer;
-        }
-
-        .checkbox-label input[type="checkbox"] {
-            width: auto;
-            margin: 0;
         }
 
         .forgot-link {
@@ -581,21 +580,10 @@
             font-size: 1.2rem;
         }
 
-        .notification-success .notification-icon {
-            color: #10b981;
-        }
-
-        .notification-error .notification-icon {
-            color: #ef4444;
-        }
-
-        .notification-info .notification-icon {
-            color: #3b82f6;
-        }
-
-        .notification-warning .notification-icon {
-            color: #f59e0b;
-        }
+        .notification-success .notification-icon { color: #10b981; }
+        .notification-error .notification-icon { color: #ef4444; }
+        .notification-info .notification-icon { color: #3b82f6; }
+        .notification-warning .notification-icon { color: #f59e0b; }
 
         .notification-message {
             flex: 1;
@@ -620,151 +608,73 @@
 
         /* Animations */
         @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes fadeInUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         @keyframes slideInLeft {
-            from {
-                transform: translateX(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         @keyframes glow {
-            from {
-                text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-            }
-            to {
-                text-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
-            }
+            from { text-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+            to { text-shadow: 0 0 30px rgba(139, 92, 246, 0.8); }
         }
 
         @keyframes cardSlideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 53%, 80%, 100% {
-                transform: translate3d(0, 0, 0);
-            }
-            40%, 43% {
-                transform: translate3d(0, -8px, 0);
-            }
-            70% {
-                transform: translate3d(0, -4px, 0);
-            }
-            90% {
-                transform: translate3d(0, -2px, 0);
-            }
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-container {
-                padding: 0 1rem;
-            }
-            
-            .nav-buttons {
-                gap: 0.5rem;
-            }
-            
-            .btn-primary, .btn-secondary {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-            
-            .main-content {
-                padding: 6rem 1rem 2rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                margin-top: 3rem;
-            }
-            
-            .modal {
-                padding: 2rem;
-                margin: 1rem;
-            }
-            
-            .form-options {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            .nav-container { padding: 0 1rem; }
+            .hamburger { display: block; }
+            .nav-buttons { display: none; }
+            .nav-buttons.active { display: flex; }
+            .btn-primary, .btn-secondary { padding: 0.6rem 1rem; font-size: 0.9rem; }
+            .main-content { padding: 6rem 1rem 2rem; }
+            .features-grid { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3rem; }
+            .modal { padding: 2rem; margin: 1rem; }
+            .form-options { flex-direction: column; align-items: flex-start; }
+            .particle { display: none; } /* Disable particles on mobile */
+            .spline-container { display: none; } /* Hide Spline on mobile */
+            body { background: linear-gradient(135deg, #1a1a1a, #000); } /* Fallback background */
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .modal {
-                padding: 1.5rem;
-            }
-            
-            .modal-header h2 {
-                font-size: 1.5rem;
-            }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .modal { padding: 1.5rem; }
+            .modal-header h2 { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 400px) {
+            .modal { max-width: 90%; padding: 1.2rem; }
+            .modal-header h2 { font-size: 1.3rem; }
+            .form-group input { padding: 0.8rem; font-size: 0.9rem; }
+            .btn-submit { padding: 0.8rem; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    
     <div class="spline-container">
         <iframe class="spline-bg" src="https://prod.spline.design/08IoRwMjFgR5fBkN/scene.splinecode" frameborder="0"></iframe>
         <div class="spline-overlay"></div>
@@ -779,21 +689,19 @@
         <div class="particle"></div>
     </div>
 
-
     <nav class="navbar">
-        
         <div class="nav-container">
             <div class="logo">
                 <span class="logo-text">NEXUS</span>
             </div>
-            <div class="nav-buttons">
+            <button class="hamburger" id="hamburgerBtn">&#9776;</button>
+            <div class="nav-buttons" id="navButtons">
                 <button class="btn-secondary" id="loginBtn">Login</button>
                 <button class="btn-primary" id="signupBtn">Get Started</button>
                 <button class="btn-secondary" id="logoutBtn" style="display: none;">Logout</button>
             </div>
         </div>
     </nav>
-
 
     <main class="main-content">
         <div class="hero-section">
@@ -816,8 +724,7 @@
                     <button class="btn-ghost">Learn More</button>
                 </div>
             </div>
-            
-        
+
             <div class="features-grid">
                 <div class="feature-card" data-delay="0">
                     <div class="feature-icon">
@@ -852,7 +759,6 @@
         </div>
     </main>
 
-
     <div class="modal-overlay" id="loginModal">
         <div class="modal">
             <div class="modal-header">
@@ -885,7 +791,6 @@
         </div>
     </div>
 
-    <!-- Signup Modal -->
     <div class="modal-overlay" id="signupModal">
         <div class="modal">
             <div class="modal-header">
@@ -936,7 +841,6 @@
         let user = { name: 'Guest', email: null };
         let hasShownLoginPrompt = false;
 
-        // Cookie Handling
         function setCookie(name, value, days) {
             const expires = new Date(Date.now() + days * 864e5).toUTCString();
             document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
@@ -948,12 +852,10 @@
             return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : null;
         }
 
-        // Check if user is logged in
         function isLoggedIn() {
             return !!sessionToken;
         }
 
-        // Connect to WebSocket
         function connectWebSocket() {
             try {
                 ws = new WebSocket('wss://nexus-store-2.onrender.com');
@@ -962,7 +864,6 @@
                 ws.onopen = () => {
                     console.log('Connected to WebSocket server');
                     reconnectAttempts = 0;
-                    // Validate session if token exists
                     sessionToken = getCookie('sessionToken');
                     if (sessionToken) {
                         ws.send(JSON.stringify({ type: 'validateSession', payload: { sessionToken } }));
@@ -985,7 +886,7 @@
                         if (status === 'success') {
                             if (type === 'login' || type === 'signup') {
                                 sessionToken = newToken;
-                                setCookie('sessionToken', sessionToken, 1); // Store for 1 day
+                                setCookie('sessionToken', sessionToken, 1);
                                 user = userData || { name: 'Guest', email: null };
                                 cartItems = cart || [];
                                 updateUIForUser();
@@ -999,7 +900,7 @@
                                 updateUIForUser();
                             } else if (type === 'logout') {
                                 sessionToken = null;
-                                setCookie('sessionToken', '', -1); // Clear cookie
+                                setCookie('sessionToken', '', -1);
                                 user = { name: 'Guest', email: null };
                                 cartItems = [];
                                 updateUIForGuest();
@@ -1042,7 +943,6 @@
             }
         }
 
-        // Update UI for logged-in user
         function updateUIForUser() {
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
@@ -1055,7 +955,6 @@
             }
         }
 
-        // Update UI for guest
         function updateUIForGuest() {
             const loginBtn = document.getElementById('loginBtn');
             const signupBtn = document.getElementById('signupBtn');
@@ -1068,10 +967,8 @@
             }
         }
 
-        // Initial WebSocket connection
         connectWebSocket();
 
-        // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const ctaBtn = document.getElementById('ctaBtn');
@@ -1084,8 +981,9 @@
         const loginForm = loginModal?.querySelector('.modal-form');
         const signupForm = signupModal?.querySelector('.modal-form');
         const logoutBtn = document.getElementById('logoutBtn');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navButtons = document.getElementById('navButtons');
 
-        // Modal Functions
         function openModal(modal) {
             if (modal) {
                 modal.classList.add('active');
@@ -1107,7 +1005,6 @@
             }, 300);
         }
 
-        // Event Listeners
         if (loginBtn) {
             loginBtn.addEventListener('click', () => openModal(loginModal));
         }
@@ -1121,8 +1018,8 @@
                     setTimeout(() => {
                         ctaBtn.style.transform = '';
                         showNotification('Taking you to your dashboard...', 'info');
-                        // In a real app, this would redirect to the dashboard
-                         window.location.href = 'dashboard.html';
+                        // Replace with actual dashboard URL
+                        window.location.href = 'dashboard.html';
                     }, 150);
                 } else {
                     openModal(signupModal);
@@ -1170,6 +1067,11 @@
                 }
             });
         }
+        if (hamburgerBtn && navButtons) {
+            hamburgerBtn.addEventListener('click', () => {
+                navButtons.classList.toggle('active');
+            });
+        }
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (loginModal?.classList.contains('active')) {
@@ -1178,10 +1080,12 @@
                 if (signupModal?.classList.contains('active')) {
                     closeModal(signupModal);
                 }
+                if (navButtons?.classList.contains('active')) {
+                    navButtons.classList.remove('active');
+                }
             }
         });
 
-        // Form Handling
         if (loginForm) {
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -1244,7 +1148,6 @@
             });
         }
 
-        // Notification System
         function showNotification(message, type = 'info') {
             const existingNotification = document.querySelector('.notification');
             if (existingNotification) {
@@ -1296,7 +1199,6 @@
             }, 300);
         }
 
-        // Smooth Scrolling for Learn More Button
         const learnMoreBtn = document.querySelector('.btn-ghost');
         if (learnMoreBtn) {
             learnMoreBtn.addEventListener('click', (e) => {
