@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Store - Product Quick View</title>
+    <link rel="stylesheet" href="/css/dash.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: white;
+            z-index: 3000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .notification.hide {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        .notification-success {
+            border-left: 4px solid #10b981;
+        }
+        .notification-error {
+            border-left: 4px solid #ef4444;
+        }
+        .notification-info {
+            border-left: 4px solid #3b82f6;
+        }
+        .notification-warning {
+            border-left: 4px solid #f59e0b;
+        }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .notification-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .notification-success .notification-icon {
+            color: #10b981;
+        }
+        .notification-error .notification-icon {
+            color: #ef4444;
+        }
+        .notification-info .notification-icon {
+            color: #3b82f6;
+        }
+        .notification-warning .notification-icon {
+            color: #f59e0b;
+        }
+        .notification-message {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+            flex-shrink: 0;
+        }
+        .notification-close:hover {
+            color: #fff;
+        }
+        .btn-primary, .btn-secondary, .add-to-cart-btn, .buy-now-btn, .wishlist-btn, .login-btn, .logout-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -8px, 0);
+            }
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+        }
+        .modal-content p {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+        .modal-content p a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        .modal-content p a:hover {
+            text-decoration: underline;
+        }
+        .login-btn {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+        .login-btn:hover {
+            background: #2563eb;
+        }
+        .logout-btn {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+        .quickview-section {
+            padding: 8rem 0 4rem;
+            background: #0f0f0f;
+            min-height: 100vh;
+        }
+        .quickview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .quickview-image {
+            flex: 1;
+            max-width: 500px;
+        }
+        .quickview-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .quickview-details {
+            flex: 1;
+            color: #fff;
+        }
+        .quickview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        .quickview-price {
+            font-size: 1.8rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .quickview-original-price {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: line-through;
+        }
+        .quickview-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .quickview-stars {
+            color: #f59e0b;
+            font-size: 1.2rem;
+        }
+        .quickview-rating-count {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .quickview-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .quickview-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .quickview-badge.best-seller {
+            background: #10b981;
+            color: #fff;
+        }
+        .quickview-badge.new {
+            background: #3b82f6;
+            color: #fff;
+        }
+        .quickview-badge.sale {
+            background: #ef4444;
+            color: #fff;
+        }
+        .quickview-badge.hot {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .add-to-cart-btn, .buy-now-btn, .wishlist-btn {
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #ec4899, #f59e0b);
+            color: #fff;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+        }
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
+        }
+        .add-to-cart-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
+        }
+        .buy-now-btn {
+            background: #3b82f6;
+            color: #fff;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 1rem;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+        .buy-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+        }
+        .buy-now-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+        .wishlist-btn {
+            background: #10b981;
+            color: #fff;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 1rem;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+        }
+        .wishlist-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4);
+        }
+        .wishlist-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+        .error-message {
+            text-align: center;
+            color: #ef4444;
+            font-size: 1.2rem;
+            padding: 2rem;
+        }
+        .suggested-products {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        .suggested-products h2 {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .suggested-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .suggested-product-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .suggested-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .suggested-product-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .suggested-product-details {
+            padding: 1rem;
+            color: #fff;
+        }
+        .suggested-product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .suggested-product-price {
+            font-size: 1.1rem;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        .suggested-product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #f59e0b;
+        }
+        @media (max-width: 768px) {
+            .notification {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+            .notification.show {
+                transform: translateY(0);
+            }
+            .notification.hide {
+                transform: translateY(-100px);
+            }
+            .quickview-section {
+                padding: 6rem 0 2rem;
+            }
+            .quickview-container {
+                flex-direction: column;
+                padding: 0 1rem;
+                gap: 2rem;
+            }
+            .quickview-image {
+                max-width: 100%;
+            }
+            .quickview-title {
+                font-size: 2rem;
+            }
+            .quickview-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">NEXUS</span>
+                <span class="logo-subtitle">STORE</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="electronics.html#products" class="nav-link">Products</a>
+                <a href="index.html#categories" class="nav-link">Categories</a>
+                <a href="index.html#deals" class="nav-link">Deals</a>
+                <a href="index.html#about" class="nav-link">About</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Search products..." class="search-input">
+                    <button class="search-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="cart-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 21h12"/>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+                <div class="user-profile">
+                    <img src="/images/v2.jpg" alt="User" class="profile-img">
+                    <span class="profile-name" id="profile-name">Guest</span>
+                    <button class="login-btn" id="login-btn">Login</button>
+                    <button class="logout-btn" id="logout-btn" style="display: none;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Login to NEXUS Store</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" class="signup-link">Sign Up</a></p>
+        </div>
+    </div>
+
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Sign Up for NEXUS Store</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Name</label>
+                    <input type="text" id="signup-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+        </div>
+    </div>
+
+    <section class="quickview-section">
+        <div class="quickview-container" id="quickview-container">
+            <div class="error-message" id="error-message" style="display: none;">Product not found. <a href="index.html">Return to Home</a></div>
+        </div>
+        <div class="suggested-products" id="suggested-products">
+            <h2>Suggested Products</h2>
+            <div class="suggested-products-grid" id="suggested-products-grid"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-text">NEXUS</span>
+                        <span class="logo-subtitle">STORE</span>
+                    </div>
+                    <p class="footer-description">
+                        Your premium destination for cutting-edge technology, fashion, and lifestyle products.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="electronics.html#products">Products</a></li>
+                        <li><a href="index.html#categories">Categories</a></li>
+                        <li><a href="index.html#deals">Deals</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Customer Service</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact Info</h3>
+                    <div class="contact-info">
+                        <p>📧 vansh565.sharma@gmail.com</p>
+                        <p>📞 +91 8082840158</p>
+                        <p>Jammu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NEXUS Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mockProducts = {
+            "1": {
+                id: "1",
+                name: "Premium Wireless Headphones",
+                description: "High-quality sound with noise cancellation and up to 30 hours of battery life.",
+                currentPrice: "$299",
+                originalPrice: "$399",
+                image: "https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                badge: "Best Seller",
+                badgeClass: "best-seller",
+                stars: "★★★★★",
+                ratingCount: "(124 reviews)"
+            },
+            "2": {
+                id: "2",
+                name: "Smart Fitness Watch",
+                description: "Track your health and fitness goals with advanced sensors and a sleek design.",
+                currentPrice: "$199",
+                image: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                badge: "New",
+                badgeClass: "new",
+                stars: "★★★★☆",
+                ratingCount: "(89 reviews)"
+            },
+            "3": {
+                id: "3",
+                name: "Ultra-thin Laptop",
+                description: "Powerful performance in a sleek design, perfect for work and play.",
+                currentPrice: "$899",
+                originalPrice: "$1,199",
+                image: "https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                badge: "Sale",
+                badgeClass: "sale",
+                stars: "★★★★★",
+                ratingCount: "(256 reviews)"
+            },
+            "4": {
+                id: "4",
+                name: "Premium Sneakers",
+                description: "Comfortable and stylish footwear for everyday wear.",
+                currentPrice: "$149",
+                image: "https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                stars: "★★★★☆",
+                ratingCount: "(67 reviews)"
+            },
+            "5": {
+                id: "5",
+                name: "Latest Smartphone",
+                description: "Cutting-edge technology in your pocket with a stunning display and camera.",
+                currentPrice: "$799",
+                image: "https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                badge: "Hot",
+                badgeClass: "hot",
+                stars: "★★★★★",
+                ratingCount: "(342 reviews)"
+            },
+            "6": {
+                id: "6",
+                name: "Bicycle",
+                description: "Best cycle with advanced brewing technology.",
+                currentPrice: "$249",
+                originalPrice: "$299",
+                image: "https://images.pexels.com/photos/276517/pexels-photo-276517.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop",
+                stars: "★★★★☆",
+                ratingCount: "(78 reviews)"
+            }
+        };
+
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        const reconnectDelay = 5000;
+        let cartItems = [];
+        let wishlistItems = [];
+        let sessionToken = null;
+        let user = { name: 'Guest', email: null };
+        let isSessionValidated = false;
+        const cartCount = document.querySelector('.cart-count');
+        const quickviewContainer = document.getElementById('quickview-container');
+        const errorMessage = document.getElementById('error-message');
+        const suggestedProductsGrid = document.getElementById('suggested-products-grid');
+
+        function setCookie(name, value, days) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : null;
+        }
+
+        function isLoggedIn() {
+            return !!sessionToken && isSessionValidated;
+        }
+
+        function requireLogin() {
+            showNotification('Please login to continue', 'warning');
+            document.getElementById('login-modal').style.display = 'block';
+            return false;
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket('wss://nexus-store-2.onrender.com');
+            console.log('Attempting WebSocket connection...');
+
+            ws.onopen = () => {
+                console.log('Connected to WebSocket server');
+                reconnectAttempts = 0;
+                sessionToken = getCookie('sessionToken');
+                if (sessionToken) {
+                    ws.send(JSON.stringify({ type: 'validateSession', payload: { sessionToken } }));
+                } else {
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                }
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('WebSocket message:', data);
+                const { status, message, user: userData, type, sessionToken: newToken, cart, wishlist } = data;
+                showNotification(message, status);
+
+                if (status === 'success') {
+                    if (type === 'login' || type === 'signup') {
+                        sessionToken = newToken;
+                        setCookie('sessionToken', sessionToken, 4);
+                        user = userData || { name: 'Guest', email: null };
+                        cartItems = cart || [];
+                        wishlistItems = wishlist || [];
+                        isSessionValidated = true;
+                        updateUIForUser();
+                        document.getElementById(type === 'login' ? 'login-modal' : 'signup-modal').style.display = 'none';
+                    } else if (type === 'validateSession') {
+                        user = userData || { name: 'Guest', email: null };
+                        cartItems = cart || [];
+                        wishlistItems = wishlist || [];
+                        isSessionValidated = true;
+                        updateUIForUser();
+                    } else if (type === 'logout') {
+                        sessionToken = null;
+                        setCookie('sessionToken', '', -1);
+                        user = { name: 'Guest', email: null };
+                        cartItems = [];
+                        wishlistItems = [];
+                        isSessionValidated = false;
+                        updateUIForGuest();
+                    } else if (type === 'cartUpdate') {
+                        cartItems = cart || [];
+                        updateCartCount();
+                    } else if (type === 'wishlistUpdate') {
+                        wishlistItems = wishlist || [];
+                    }
+                } else if (status === 'error' && message.includes('session')) {
+                    sessionToken = null;
+                    setCookie('sessionToken', '', -1);
+                    user = { name: 'Guest', email: null };
+                    cartItems = [];
+                    wishlistItems = [];
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                    document.getElementById('login-modal').style.display = 'block';
+                }
+            };
+
+            ws.onerror = (err) => {
+                console.error('WebSocket error:', err);
+                showNotification('Failed to connect to server', 'error');
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    console.log(`Reconnecting in ${reconnectDelay / 1000}s... (Attempt ${reconnectAttempts}/${maxReconnectAttempts})`);
+                    setTimeout(connectWebSocket, reconnectDelay);
+                } else {
+                    showNotification('Unable to connect to server after multiple attempts', 'error');
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                }
+            };
+        }
+
+        function updateCartCount() {
+            if (cartCount) {
+                cartCount.textContent = cartItems.reduce((total, item) => total + item.quantity, 0) || 0;
+                cartCount.style.animation = 'bounce 0.5s ease';
+                setTimeout(() => cartCount.style.animation = '', 500);
+            }
+        }
+
+        function updateUIForUser() {
+            const profileName = document.getElementById('profile-name');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            if (profileName && loginBtn && logoutBtn) {
+                profileName.textContent = user.name || user.email?.split('@')[0] || 'Guest';
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                updateCartCount();
+            }
+        }
+
+        function updateUIForGuest() {
+            const profileName = document.getElementById('profile-name');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            if (profileName && loginBtn && logoutBtn) {
+                profileName.textContent = 'Guest';
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                if (cartCount) cartCount.textContent = '0';
+            }
+        }
+
+        function loadProduct() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('productId');
+            const product = mockProducts[productId];
+
+            if (product) {
+                renderProduct(product);
+                renderSuggestedProducts(productId);
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function renderProduct(product) {
+            errorMessage.style.display = 'none';
+            quickviewContainer.innerHTML = `
+                <div class="quickview-image">
+                    <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="quickview-details">
+                    <h2 class="quickview-title">${product.name}</h2>
+                    <div class="quickview-price">
+                        ${product.currentPrice}
+                        ${product.originalPrice ? `<span class="quickview-original-price">${product.originalPrice}</span>` : ''}
+                    </div>
+                    <div class="quickview-rating">
+                        <span class="quickview-stars">${product.stars || ''}</span>
+                        <span class="quickview-rating-count">${product.ratingCount || ''}</span>
+                    </div>
+                    ${product.badge ? `<span class="quickview-badge ${product.badgeClass}">${product.badge}</span>` : ''}
+                    <p class="quickview-description">${product.description}</p>
+                    <button class="add-to-cart-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 21h12"/>
+                        </svg>
+                        Add to Cart
+                    </button>
+                    <button class="buy-now-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        Buy Now
+                    </button>
+                    <button class="wishlist-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        Add to Wishlist
+                    </button>
+                </div>
+            `;
+
+            const addToCartBtn = quickviewContainer.querySelector('.add-to-cart-btn');
+            const buyNowBtn = quickviewContainer.querySelector('.buy-now-btn');
+            const wishlistBtn = quickviewContainer.querySelector('.wishlist-btn');
+
+            addToCartBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isLoggedIn()) return requireLogin();
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    showNotification('Cannot add to cart: Server not connected', 'error');
+                    return;
+                }
+                const originalText = addToCartBtn.textContent;
+                addToCartBtn.textContent = 'Adding...';
+                addToCartBtn.disabled = true;
+                const productData = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.currentPrice,
+                    image: product.image,
+                    quantity: 1
+                };
+                ws.send(JSON.stringify({ type: 'addToCart', product: productData, payload: { sessionToken } }));
+                setTimeout(() => {
+                    addToCartBtn.textContent = originalText;
+                    addToCartBtn.disabled = false;
+                    showNotification(`${product.name} added to cart!`, 'success');
+                }, 1000);
+            });
+
+            buyNowBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isLoggedIn()) return requireLogin();
+                buyNowBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    buyNowBtn.style.transform = 'scale(1)';
+                    window.location.href = `buynow.html?productId=${product.id}`;
+                }, 150);
+            });
+
+            wishlistBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isLoggedIn()) return requireLogin();
+                wishlistBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    wishlistBtn.style.transform = 'scale(1)';
+                    window.location.href = `wishlist.html`;
+                }, 150);
+            });
+        }
+
+        function renderSuggestedProducts(currentProductId) {
+            const suggestedProducts = Object.values(mockProducts)
+                .filter(product => product.id !== currentProductId)
+                .slice(0, 4);
+            suggestedProductsGrid.innerHTML = suggestedProducts.map(product => `
+                <div class="suggested-product-card" data-product-id="${product.id}">
+                    <div class="suggested-product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="suggested-product-details">
+                        <h3 class="suggested-product-title">${product.name}</h3>
+                        <div class="suggested-product-price">${product.currentPrice}</div>
+                        <div class="suggested-product-rating">
+                            <span>${product.stars || ''}</span>
+                            <span>${product.ratingCount || ''}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.suggested-product-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const productId = card.getAttribute('data-product-id');
+                    window.location.href = `quickview.html?productId=${productId}`;
+                });
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) existingNotification.remove();
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${getNotificationIcon(type)}</span>
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            const autoRemove = setTimeout(() => removeNotification(notification), 4000);
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                removeNotification(notification);
+            });
+        }
+
+        function getNotificationIcon(type) {
+            const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+            return icons[type] || icons.info;
+        }
+
+        function removeNotification(notification) {
+            notification.classList.add('hide');
+            setTimeout(() => notification.parentNode?.removeChild(notification), 300);
+        }
+
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+            circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+            circle.classList.add('ripple');
+            const ripple = button.getElementsByClassName('ripple')[0];
+            if (ripple) ripple.remove();
+            button.appendChild(circle);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            connectWebSocket();
+            loadProduct();
+
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginModal = document.getElementById('login-modal');
+            const signupModal = document.getElementById('signup-modal');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const modalCloses = document.querySelectorAll('.modal-close');
+            const signupLink = document.querySelector('.signup-link');
+            const loginLink = document.querySelector('.login-link');
+            const cartBtn = document.querySelector('.cart-btn');
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+
+            loginBtn?.addEventListener('click', () => {
+                loginModal.style.display = 'block';
+            });
+
+            logoutBtn?.addEventListener('click', () => {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ type: 'logout', payload: { sessionToken } }));
+                } else {
+                    showNotification('Cannot logout: Server not connected', 'error');
+                }
+            });
+
+            modalCloses.forEach(close => {
+                close.addEventListener('click', () => {
+                    loginModal.style.display = 'none';
+                    signupModal.style.display = 'none';
+                });
+            });
+
+            signupLink?.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'block';
+            });
+
+            loginLink?.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+
+            loginForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    showNotification('Cannot login: Server not connected', 'error');
+                    return;
+                }
+                const submitBtn = loginForm.querySelector('.btn-primary');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Logging In...';
+                submitBtn.disabled = true;
+                const email = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value;
+                ws.send(JSON.stringify({ type: 'login', payload: { email, password } }));
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+
+            signupForm?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    showNotification('Cannot sign up: Server not connected', 'error');
+                    return;
+                }
+                const submitBtn = signupForm.querySelector('.btn-primary');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Signing Up...';
+                submitBtn.disabled = true;
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim();
+                const password = document.getElementById('signup-password').value;
+                ws.send(JSON.stringify({ type: 'signup', payload: { name, email, password } }));
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+
+            cartBtn?.addEventListener('click', () => {
+                if (isLoggedIn()) {
+                    cartBtn.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        cartBtn.style.transform = 'scale(1)';
+                        window.location.href = 'cart.html';
+                    }, 150);
+                } else {
+                    requireLogin();
+                }
+            });
+
+            if (searchBtn && searchInput) {
+                searchBtn.addEventListener('click', () => {
+                    if (!isLoggedIn()) return requireLogin();
+                    performSearch();
+                });
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        if (!isLoggedIn()) return requireLogin();
+                        performSearch();
+                    }
+                });
+            }
+
+            function performSearch() {
+                const query = searchInput.value.trim();
+                if (query) {
+                    searchBtn.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        searchBtn.style.transform = 'scale(1)';
+                        showNotification(`Searching for "${query}"...`, 'info');
+                        setTimeout(() => {
+                            window.location.href = `electronics.html?search=${encodeURIComponent(query)}`;
+                        }, 1000);
+                    }, 150);
+                }
+            }
+
+            document.querySelectorAll('.btn-primary, .btn-secondary, .add-to-cart-btn, .buy-now-btn, .wishlist-btn, .login-btn, .logout-btn').forEach(button => {
+                button.addEventListener('click', createRipple);
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            observer.observe(quickviewContainer);
+            observer.observe(suggestedProductsGrid);
+
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => document.body.style.opacity = '1', 100);
+        });
+
+        console.log('🔍 Quick View Page Loaded Successfully!');
+    </script>
+</body>
+</html>

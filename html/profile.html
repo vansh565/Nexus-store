@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS Store - Your Profile</title>
+    <link rel="stylesheet" href="/css/dash.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: white;
+            z-index: 3000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .notification.hide {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+        .notification-success {
+            border-left: 4px solid #10b981;
+        }
+        .notification-error {
+            border-left: 4px solid #ef4444;
+        }
+        .notification-info {
+            border-left: 4px solid #3b82f6;
+        }
+        .notification-warning {
+            border-left: 4px solid #f59e0b;
+        }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .notification-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .notification-success .notification-icon {
+            color: #10b981;
+        }
+        .notification-error .notification-icon {
+            color: #ef4444;
+        }
+        .notification-info .notification-icon {
+            color: #3b82f6;
+        }
+        .notification-warning .notification-icon {
+            color: #f59e0b;
+        }
+        .notification-message {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .notification-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+            flex-shrink: 0;
+        }
+        .notification-close:hover {
+            color: #fff;
+        }
+        /* Ripple Effect */
+        .btn-primary, .btn-secondary, .login-btn, .logout-btn, .update-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -8px, 0);
+            }
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Login/Signup Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+        }
+        .btn-primary {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .btn-primary:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+        }
+        .login-btn {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+        .login-btn:hover {
+            background: #2563eb;
+        }
+        .logout-btn {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+        .update-btn {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+        .update-btn:hover {
+            background: #059669;
+        }
+        /* Profile Section */
+        .profile-section {
+            padding: 4rem 0;
+            background: #0f0f0f;
+            min-height: 100vh;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .profile-title {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .profile-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        .profile-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .profile-info {
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+        .profile-info h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .profile-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .notification {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+            .notification.show {
+                transform: translateY(0);
+            }
+            .notification.hide {
+                transform: translateY(-100px);
+            }
+            .profile-card {
+                padding: 1.5rem;
+            }
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">NEXUS</span>
+                <span class="logo-subtitle">STORE</span>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Home</a>
+                <a href="electronics.html#products" class="nav-link">Products</a>
+                <a href="dashboard.html#categories" class="nav-link">Categories</a>
+                <a href="dashboard.html#deals" class="nav-link">Deals</a>
+                <a href="dashboard.html#about" class="nav-link">About</a>
+            </div>
+            <div class="nav-actions">
+                <div class="search-container">
+                    <input type="text" placeholder="Search products..." class="search-input">
+                    <button class="search-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="cart-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L6 21h12"/>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+                <div class="user-profile">
+                    <a href="profile.html">
+                        <img src="/images/v2.jpg" alt="User" class="profile-img" id="nav-profile-img">
+                    </a>
+                </div>
+                <span class="profile-name" id="profile-name">Guest</span>
+                <button class="login-btn" id="login-btn">Login</button>
+                <button class="logout-btn" id="logout-btn" style="display: none;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Login to NEXUS Store</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" class="signup-link">Sign Up</a></p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Sign Up for NEXUS Store</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Name</label>
+                    <input type="text" id="signup-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div class="modal" id="otp-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Verify OTP</h2>
+            <form id="otp-form">
+                <div class="form-group">
+                    <label for="otp-input">OTP</label>
+                    <input type="text" id="otp-input" placeholder="Enter OTP" required>
+                </div>
+                <button type="submit" class="btn-primary">Verify OTP</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h2 class="profile-title">Your Profile</h2>
+                <p class="profile-subtitle">Manage your account details</p>
+            </div>
+            <div class="profile-card">
+                <img src="/images/v2.jpg" alt="Profile" class="profile-image" id="profile-image">
+                <input type="file" id="profile-image-input" accept="image/*" style="display: none;">
+                <div class="profile-info">
+                    <h3 id="profile-name-display">Guest</h3>
+                    <p id="profile-email">Not logged in</p>
+                </div>
+                <form id="update-profile-form">
+                    <div class="form-group">
+                        <label for="update-name">Name</label>
+                        <input type="text" id="update-name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-email">Email</label>
+                        <input type="email" id="update-email" placeholder="Enter your email">
+                    </div>
+                    <div class="profile-actions">
+                        <button type="button" class="update-btn" id="update-image-btn">Change Image</button>
+                        <button type="button" class="update-btn" id="request-otp-btn" disabled>Request OTP</button>
+                        <button type="submit" class="btn-primary">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-text">NEXUS</span>
+                        <span class="logo-subtitle">STORE</span>
+                    </div>
+                    <p class="footer-description">
+                        Your premium destination for cutting-edge technology, fashion, and lifestyle products.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Twitter</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">LinkedIn</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="dashboard.html">Home</a></li>
+                        <li><a href="electronics.html#products">Products</a></li>
+                        <li><a href="dashboard.html#categories">Categories</a></li>
+                        <li><a href="dashboard.html#deals">Deals</a></li>
+                        <li><a href="dashboard.html#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Customer Service</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact Info</h3>
+                    <div class="contact-info">
+                        <p>📧 vansh565.sharma@gmail.com</p>
+                        <p>📞 +91 8082840158</p>
+                        <p>Jammu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NEXUS Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize WebSocket and session variables
+        const API_BASE_URL = 'wss://nexus-store-2.onrender.com';
+        let ws = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        const reconnectDelay = 5000;
+        let sessionToken = null;
+        let user = { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+        let isSessionValidated = false;
+        let pendingEmail = null;
+        const cartCount = document.querySelector('.cart-count');
+        const profileName = document.getElementById('profile-name');
+        const profileNameDisplay = document.getElementById('profile-name-display');
+        const profileEmail = document.getElementById('profile-email');
+        const profileImage = document.getElementById('profile-image');
+        const navProfileImg = document.getElementById('nav-profile-img');
+        const updateImageBtn = document.getElementById('update-image-btn');
+        const profileImageInput = document.getElementById('profile-image-input');
+        const updateProfileForm = document.getElementById('update-profile-form');
+        const updateNameInput = document.getElementById('update-name');
+        const updateEmailInput = document.getElementById('update-email');
+        const requestOtpBtn = document.getElementById('request-otp-btn');
+        const otpModal = document.getElementById('otp-modal');
+        const otpForm = document.getElementById('otp-form');
+        const otpInput = document.getElementById('otp-input');
+
+        // Cookie Handling
+        function setCookie(name, value, days) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : null;
+        }
+
+        // Check if user is logged in
+        function isLoggedIn() {
+            return !!sessionToken && isSessionValidated;
+        }
+
+        // Show login prompt
+        function requireLogin() {
+            showNotification('Please log in to view your profile', 'warning');
+            document.getElementById('login-modal').style.display = 'block';
+            return false;
+        }
+
+        // Connect to WebSocket
+        function connectWebSocket() {
+            ws = new WebSocket('wss://nexus-store-2.onrender.com');
+            console.log('Attempting WebSocket connection...');
+
+            ws.onopen = () => {
+                console.log('Connected to WebSocket server');
+                reconnectAttempts = 0;
+                sessionToken = getCookie('sessionToken');
+                if (sessionToken) {
+                    ws.send(JSON.stringify({ type: 'validateSession', payload: { sessionToken } }));
+                } else {
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                    requireLogin();
+                }
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                console.log('WebSocket message:', data);
+                const { status, message, user: userData, type, sessionToken: newToken, cart } = data;
+                showNotification(message, status);
+
+                if (status === 'success') {
+                    if (type === 'login' || type === 'signup') {
+                        sessionToken = newToken;
+                        setCookie('sessionToken', sessionToken, 4);
+                        user = userData || { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+                        isSessionValidated = true;
+                        updateUIForUser();
+                        updateProfileFormInputs();
+                        document.getElementById(type === 'login' ? 'login-modal' : 'signup-modal').style.display = 'none';
+                    } else if (type === 'validateSession') {
+                        user = userData || { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+                        isSessionValidated = true;
+                        updateUIForUser();
+                        updateProfileFormInputs();
+                    } else if (type === 'logout') {
+                        sessionToken = null;
+                        setCookie('sessionToken', '', -1);
+                        user = { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+                        isSessionValidated = false;
+                        updateUIForGuest();
+                        requireLogin();
+                    } else if (type === 'sendEmailOtp') {
+                        requestOtpBtn.disabled = true;
+                        otpModal.style.display = 'block';
+                    } else if (type === 'verifyEmailOtp') {
+                        otpModal.style.display = 'none';
+                        otpInput.value = '';
+                        requestOtpBtn.disabled = true;
+                        if (pendingEmail) {
+                            ws.send(JSON.stringify({
+                                type: 'updateProfile',
+                                payload: {
+                                    sessionToken,
+                                    name: updateNameInput.value.trim(),
+                                    email: pendingEmail
+                                }
+                            }));
+                            pendingEmail = null;
+                        }
+                    } else if (type === 'updateProfile') {
+                        user = userData || { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+                        updateUIForUser();
+                        updateProfileFormInputs();
+                    }
+                } else if (status === 'error' && message.includes('session')) {
+                    sessionToken = null;
+                    setCookie('sessionToken', '', -1);
+                    user = { name: 'Guest', email: null, profileImage: '/images/v2.jpg' };
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                    requireLogin();
+                }
+            };
+
+            ws.onerror = (err) => {
+                console.error('WebSocket error:', err);
+                showNotification('Failed to connect to server', 'error');
+                isSessionValidated = false;
+                updateUIForGuest();
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    console.log(`Reconnecting in ${reconnectDelay / 1000}s... (Attempt ${reconnectAttempts}/${maxReconnectAttempts})`);
+                    setTimeout(connectWebSocket, reconnectDelay);
+                } else {
+                    showNotification('Unable to connect to server after multiple attempts', 'error');
+                    isSessionValidated = false;
+                    updateUIForGuest();
+                }
+            };
+        }
+
+        // Update UI for logged-in user
+        function updateUIForUser() {
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            if (profileName && loginBtn && logoutBtn) {
+                profileName.textContent = user.name || user.email?.split('@')[0] || 'Guest';
+                profileNameDisplay.textContent = user.name || user.email?.split('@')[0] || 'Guest';
+                profileEmail.textContent = user.email || 'Not logged in';
+                // Use lowercase /uploads/ and add cache-busting query
+                const imageUrl = user.profileImage ? `${API_BASE_URL}/uploads/${user.profileImage.split('/').pop()}?t=${Date.now()}` : '/images/v2.jpg';
+                console.log('Updating profile image to:', imageUrl);
+                profileImage.src = imageUrl;
+                navProfileImg.src = imageUrl;
+                // Verify image load
+                const img = new Image();
+                img.src = imageUrl;
+                img.onload = () => console.log(`Image loaded successfully: ${imageUrl}`);
+                img.onerror = () => {
+                    console.error(`Failed to load image: ${imageUrl}`);
+                    showNotification('Failed to load profile image', 'error');
+                };
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                updateImageBtn.disabled = false;
+                requestOtpBtn.disabled = !updateEmailInput.value.trim() || updateEmailInput.value.trim() === user.email;
+                cartCount.textContent = user.cart?.reduce((total, item) => total + item.quantity, 0) || 0;
+            }
+        }
+
+        // Update UI for guest
+        function updateUIForGuest() {
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            if (profileName && loginBtn && logoutBtn) {
+                profileName.textContent = 'Guest';
+                profileNameDisplay.textContent = 'Guest';
+                profileEmail.textContent = 'Not logged in';
+                profileImage.src = '/images/v2.jpg';
+                navProfileImg.src = '/images/v2.jpg';
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                updateImageBtn.disabled = true;
+                requestOtpBtn.disabled = true;
+                updateNameInput.value = '';
+                updateEmailInput.value = '';
+                cartCount.textContent = '0';
+            }
+        }
+
+        // Update profile form inputs
+        function updateProfileFormInputs() {
+            updateNameInput.value = user.name || '';
+            updateEmailInput.value = user.email || '';
+            requestOtpBtn.disabled = true;
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) existingNotification.remove();
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${getNotificationIcon(type)}</span>
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            const autoRemove = setTimeout(() => removeNotification(notification), 4000);
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                removeNotification(notification);
+            });
+        }
+
+        function getNotificationIcon(type) {
+            const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+            return icons[type] || icons.info;
+        }
+
+        function removeNotification(notification) {
+            notification.classList.add('hide');
+            setTimeout(() => notification.parentNode?.removeChild(notification), 300);
+        }
+
+        // Ripple effect
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement('span');
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+            circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+            circle.classList.add('ripple');
+            const ripple = button.getElementsByClassName('ripple')[0];
+            if (ripple) ripple.remove();
+            button.appendChild(circle);
+        }
+
+        // Handle profile image change
+        profileImageInput.addEventListener('change', async () => {
+            if (!isLoggedIn()) return requireLogin();
+            const file = profileImageInput.files[0];
+            console.log('Selected file:', file);
+
+            if (!file) {
+                console.log('No file selected');
+                showNotification('No file selected', 'warning');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                console.log('Invalid file type:', file.type);
+                showNotification('Please select an image file', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('profileImage', file);
+
+            try {
+                console.log('Sending image upload request...');
+                const response = await fetch(`${API_BASE_URL}/upload-profile-image`, {
+                    method: 'POST',
+                    headers: { 'x-session-token': sessionToken },
+                    body: formData
+                });
+                console.log('Response status:', response.status, 'Response headers:', response.headers);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Non-OK response:', errorText);
+                    if (response.status === 405) {
+                        showNotification('Method not allowed. Please try again.', 'error');
+                    } else if (response.status === 401) {
+                        showNotification('Session invalid or expired. Please log in again.', 'error');
+                        requireLogin();
+                    } else if (response.status === 400) {
+                        showNotification('Invalid file. Please upload a valid image.', 'error');
+                    } else {
+                        showNotification(`Upload failed: ${errorText || 'Unknown error'}`, 'error');
+                    }
+                    return;
+                }
+
+                const result = await response.json();
+                console.log('Upload response:', result);
+                if (result.status === 'success') {
+                    user.profileImage = result.profileImage;
+                    updateUIForUser();
+                    showNotification(result.message, 'success');
+                    // Verify image is accessible
+                    const img = new Image();
+                    const imageUrl = `${API_BASE_URL}/uploads/${result.profileImage.split('/').pop()}?t=${Date.now()}`;
+                    img.src = imageUrl;
+                    img.onload = () => console.log(`Image loaded successfully: ${imageUrl}`);
+                    img.onerror = () => {
+                        console.error(`Failed to load image: ${imageUrl}`);
+                        showNotification('Image uploaded but failed to load in browser. Check server path.', 'error');
+                    };
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            } catch (err) {
+                console.error('Upload error:', err);
+                showNotification('Failed to upload image: ' + err.message, 'error');
+            }
+        });
+
+        updateImageBtn.addEventListener('click', () => {
+            if (!isLoggedIn()) return requireLogin();
+            profileImageInput.click();
+        });
+
+        // Handle email input change to enable/disable OTP button
+        updateEmailInput.addEventListener('input', () => {
+            const email = updateEmailInput.value.trim();
+            requestOtpBtn.disabled = !email || email === user.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        });
+
+        // Request OTP
+        requestOtpBtn.addEventListener('click', () => {
+            if (!isLoggedIn()) return requireLogin();
+            const email = updateEmailInput.value.trim();
+            if (!email) {
+                showNotification('Please enter an email address', 'warning');
+                return;
+            }
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showNotification('Cannot request OTP: Server not connected', 'error');
+                return;
+            }
+            pendingEmail = email;
+            ws.send(JSON.stringify({ type: 'sendEmailOtp', payload: { sessionToken, email } }));
+        });
+
+        // Verify OTP
+        otpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isLoggedIn()) return requireLogin();
+            const otp = otpInput.value.trim();
+            if (!otp) {
+                showNotification('Please enter OTP', 'warning');
+                return;
+            }
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showNotification('Cannot verify OTP: Server not connected', 'error');
+                return;
+            }
+            ws.send(JSON.stringify({
+                type: 'verifyEmailOtp',
+                payload: { sessionToken, email: pendingEmail, otp }
+            }));
+        });
+
+        // Update profile
+        updateProfileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!isLoggedIn()) return requireLogin();
+            const name = updateNameInput.value.trim();
+            const email = updateEmailInput.value.trim();
+            
+            if (!name && !email) {
+                showNotification('Please provide at least one field to update', 'warning');
+                return;
+            }
+            
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showNotification('Cannot update profile: Server not connected', 'error');
+                return;
+            }
+            
+            if (email && email !== user.email) {
+                if (!pendingEmail || pendingEmail !== email) {
+                    showNotification('Please verify the new email with OTP', 'warning');
+                    return;
+                }
+            }
+
+            const submitBtn = updateProfileForm.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Updating...';
+            submitBtn.disabled = true;
+
+            ws.send(JSON.stringify({
+                type: 'updateProfile',
+                payload: { sessionToken, name, email }
+            }));
+
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Login and Signup Modal Handling
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const loginModal = document.getElementById('login-modal');
+        const signupModal = document.getElementById('signup-modal');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const modalCloses = document.querySelectorAll('.modal-close');
+
+        loginBtn?.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+
+        logoutBtn?.addEventListener('click', () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'logout', payload: { sessionToken } }));
+            } else {
+                showNotification('Cannot logout: Server not connected', 'error');
+            }
+        });
+
+        modalCloses.forEach(close => {
+            close.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'none';
+                otpModal.style.display = 'none';
+                otpInput.value = '';
+                pendingEmail = null;
+            });
+        });
+
+        document.querySelector('.signup-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            signupModal.style.display = 'block';
+        });
+
+        document.querySelector('.login-link')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupModal.style.display = 'none';
+            loginModal.style.display = 'block';
+        });
+
+        loginForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showNotification('Cannot login: Server not connected', 'error');
+                return;
+            }
+            const submitBtn = loginForm.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Logging In...';
+            submitBtn.disabled = true;
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            ws.send(JSON.stringify({ type: 'login', payload: { email, password } }));
+
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        signupForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                showNotification('Cannot sign up: Server not connected', 'error');
+                return;
+            }
+            const submitBtn = signupForm.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Signing Up...';
+            submitBtn.disabled = true;
+
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            ws.send(JSON.stringify({ type: 'signup', payload: { name, email, password } }));
+
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener('click', () => {
+                if (!isLoggedIn()) return requireLogin();
+                performSearch();
+            });
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    if (!isLoggedIn()) return requireLogin();
+                    performSearch();
+                }
+            });
+        }
+
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                searchBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    searchBtn.style.transform = 'scale(1)';
+                    showNotification(`Searching for "${query}"...`, 'info');
+                    setTimeout(() => {
+                        window.location.href = `electronics.html?search=${encodeURIComponent(query)}`;
+                    }, 1000);
+                }, 150);
+            }
+        }
+
+        // Cart button functionality
+        const cartBtn = document.querySelector('.cart-btn');
+        cartBtn?.addEventListener('click', () => {
+            if (!isLoggedIn()) return requireLogin();
+            cartBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                cartBtn.style.transform = 'scale(1)';
+                window.location.href = 'cart.html';
+            }, 150);
+        });
+
+        // Scroll animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            connectWebSocket();
+            observer.observe(document.querySelector('.profile-header'));
+            observer.observe(document.querySelector('.profile-card'));
+            document.querySelectorAll('.btn-primary, .btn-secondary, .update-btn, .login-btn, .logout-btn').forEach(button => {
+                button.addEventListener('click', createRipple);
+            });
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => document.body.style.opacity = '1', 100);
+        });
+
+        console.log('👤 Profile Page Loaded Successfully!');
+    </script>
+</body>
+</html>
