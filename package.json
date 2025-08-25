@@ -14,6 +14,7 @@
     "@tailwindcss/cli": "^4.1.11",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "express": "^5.1.0",
     "mongoose": "^8.17.0",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
