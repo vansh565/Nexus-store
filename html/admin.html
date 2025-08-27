@@ -1,0 +1,1653 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RV Enterprises - Dashboard</title>
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --secondary-bg: #ffffff;
+            --sidebar-bg: #2c3e50;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #f8f9fa;
+            --accent-blue: #3498db;
+            --accent-green: #2ecc71;
+            --accent-red: #e74c3c;
+            --accent-orange: #fb641b;
+            --border-color: #dfe6e9;
+            --hover-bg: #f1f3f5;
+            --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .ultra-dark {
+            --primary-bg: #000000;
+            --secondary-bg: #111111;
+            --card-bg: #1a1a1a;
+            --hover-bg: #2a2a2a;
+            --border-color: #333333;
+            --text-primary: #f8f9fa;
+            --text-secondary: #b2bec3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--secondary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .loading-logo i {
+            font-size: 2rem;
+            color: var(--accent-orange);
+            margin-right: 10px;
+        }
+
+        .loading-logo h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background-color: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0;
+            background-color: var(--accent-orange);
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .sidebar {
+            width: 240px;
+            background-color: var(--sidebar-bg);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .menu-text,
+        .sidebar.collapsed .user-name,
+        .sidebar.collapsed .user-role,
+        .sidebar.collapsed .logout-btn span {
+            display: none;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 1.4rem;
+            margin-right: 8px;
+            color: var(--accent-orange);
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .sidebar-toggle:hover {
+            color: var(--accent-orange);
+        }
+
+        .sidebar-menu {
+            padding: 15px;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 5px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-link:hover,
+        .menu-item.active .menu-link {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .menu-link i {
+            font-size: 1.1rem;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .menu-text {
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .logout-btn i {
+            margin-right: 8px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: var(--secondary-bg);
+            box-shadow: var(--shadow-light);
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-box input {
+            padding: 8px 12px 8px 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            width: 200px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { background-color: var(--accent-green); }
+        .stat-card:nth-child(2) .stat-icon { background-color: var(--accent-blue); }
+        .stat-card:nth-child(3) .stat-icon { background-color: var(--accent-orange); }
+        .stat-card:nth-child(4) .stat-icon { background-color: #9b59b6; }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+        }
+
+        .stat-change.positive {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--accent-green);
+        }
+
+        .stat-change.negative {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent-red);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .chart-card {
+            grid-column: span 2;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .view-all {
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .chart-container {
+            height: 220px;
+        }
+
+        .orders-list, .products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-item, .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .order-item:hover, .product-item:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .order-id, .product-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .customer-name, .product-sales {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .order-amount, .product-revenue {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .order-status {
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .order-status.pending { background-color: rgba(241, 196, 15, 0.1); color: #f1c40f; }
+        .order-status.completed { background-color: rgba(46, 204, 113, 0.1); color: var(--accent-green); }
+        .order-status.cancelled { background-color: rgba(231, 76, 60, 0.1); color: var(--accent-red); }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .action-card i {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--accent-blue);
+        }
+
+        .action-card span {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent-orange);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 12px 20px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.success { background: var(--accent-green); }
+        .notification.error { background: var(--accent-red); }
+        .notification.warning { background: var(--accent-orange); }
+
+        .all-orders-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 15px;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .products-page, .customers-page, .inventory-page {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+        }
+
+        .product-image {
+            height: 160px;
+            background-color: var(--secondary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .product-image i {
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-info h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .product-stock {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .customers-table {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-light);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--secondary-bg);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .inventory-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .inventory-stats .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .inventory-stats .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .inventory-stats .stat-card p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .inventory-list {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .inventory-list h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .inventory-list ul {
+            list-style: none;
+        }
+
+        .inventory-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-level.critical { color: var(--accent-red); }
+        .stock-level.warning { color: var(--accent-orange); }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -240px;
+                top: 0;
+                bottom: 0;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.collapsed {
+                left: -80px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .chart-card {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content-area {
+                padding: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fab {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-shopping-cart"></i>
+                <h2>RV Enterprises</h2>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">Loading dashboard...</p>
+        </div>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="logo-text">RV Enterprises</span>
+                </a>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu-list">
+                    <li class="menu-item active">
+                        <a href="#" class="menu-link" data-page="dashboard"> <i class="fas fa-home"></i> <span class="menu-text">Dashboard</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="products"> <i class="fas fa-box"></i> <span class="menu-text">Products</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="orders"> <i class="fas fa-shopping-bag"></i> <span class="menu-text">Orders</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="customers"> <i class="fas fa-users"></i> <span class="menu-text">Customers</span> </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" data-page="inventory"> <i class="fas fa-warehouse"></i> <span class="menu-text">Inventory</span> </a>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="user-profile">
+                        <div class="user-avatar"><i class="fas fa-user"></i></div>
+                        <div class="user-info">
+                            <span class="user-name">Admin User</span>
+                            <span class="user-role">Store Manager</span>
+                        </div>
+                    </div>
+                    <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
+                </div>
+            </div>
+        </nav>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome to RV Enterprises</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <button class="action-btn notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="action-btn theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+            <div class="content-area" id="contentArea">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" data-target="0">₹0</h3>
+                            <p class="stat-label">Total Revenue</p>
+                            <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" data-target="0">0</h3>
+                            <p class="stat-label">Total Orders</p>
+                            <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" data-target="0">0</h3>
+                            <p class="stat-label">Customers</p>
+                            <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-box"></i></div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" data-target="0">0</h3>
+                            <p class="stat-label">Products</p>
+                            <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card chart-card">
+                        <div class="card-header">
+                            <h3>Sales Overview</h3>
+                            <button class="btn-small"><i class="fas fa-download"></i></button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Recent Orders</h3>
+                            <a href="#" class="view-all" id="viewAllOrders">View All</a>
+                        </div>
+                        <div class="orders-list" id="ordersList"></div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Top Products</h3>
+                            <a href="#" class="view-all" id="viewAllProducts">View All</a>
+                        </div>
+                        <div class="products-list" id="productsList"></div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-card"><i class="fas fa-plus"></i><span>Add Product</span></button>
+                            <button class="action-card"><i class="fas fa-file-invoice"></i><span>Create Order</span></button>
+                            <button class="action-card"><i class="fas fa-user-plus"></i><span>Add Customer</span></button>
+                            <button class="action-card"><i class="fas fa-chart-line"></i><span>View Reports</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <button class="fab" id="fab"><i class="fas fa-plus"></i></button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const loadingScreen = document.getElementById('loadingScreen');
+            const dashboard = document.getElementById('dashboard');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const contentArea = document.getElementById('contentArea');
+            const ordersList = document.getElementById('ordersList');
+            const productsList = document.getElementById('productsList');
+            const salesChartCanvas = document.getElementById('salesChart');
+            const viewAllOrders = document.getElementById('viewAllOrders');
+            const viewAllProducts = document.getElementById('viewAllProducts');
+            const themeToggle = document.querySelector('.theme-toggle');
+            const notificationBtn = document.querySelector('.notification-btn');
+            const fab = document.getElementById('fab');
+            const logoutBtn = document.querySelector('.logout-btn');
+            const searchInput = document.querySelector('.search-box input');
+
+            // WebSocket and Polling
+            let socket;
+            let pollingInterval;
+            const API_BASE = 'https://nexus-store-2.onrender.com'; // Adjust to '/api' if needed
+            const WS_URL = 'wss://nexus-store-2.onrender.com';
+
+            function initializeWebSocket() {
+                socket = new WebSocket(WS_URL);
+                socket.onopen = () => {
+                    showNotification('Connected to real-time updates', 'success');
+                    if (pollingInterval) clearInterval(pollingInterval);
+                };
+                socket.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.event === 'placeOrder' && data.status === 'success') {
+                            showNotification('New order received!', 'success');
+                            fetchDashboardData();
+                        }
+                    } catch (err) {
+                        console.error('WebSocket message error:', err);
+                    }
+                };
+                socket.onclose = () => {
+                    showNotification('Disconnected, switching to polling', 'warning');
+                    pollingInterval = setInterval(fetchDashboardData, 30000);
+                };
+                socket.onerror = () => {
+                    showNotification('Real-time update error', 'error');
+                };
+            }
+
+            // Initialize
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                dashboard.style.opacity = '1';
+                fetchDashboardData();
+                initializeWebSocket();
+                animateCounters();
+            }, 2000);
+
+            // Sidebar Toggle
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.toggle('open');
+                }
+            });
+
+            // Close sidebar on outside click (mobile)
+            if (window.innerWidth <= 992) {
+                document.addEventListener('click', (e) => {
+                    if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            }
+
+            // Menu Navigation
+            menuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    menuLinks.forEach(l => l.parentElement.classList.remove('active'));
+                    link.parentElement.classList.add('active');
+                    const page = link.dataset.page;
+                    document.querySelector('.page-title').textContent = page.charAt(0).toUpperCase() + page.slice(1);
+                    switch (page) {
+                        case 'dashboard': showDashboard(); break;
+                        case 'products': showProductsPage(); break;
+                        case 'orders': showOrdersPage(); break;
+                        case 'customers': showCustomersPage(); break;
+                        case 'inventory': showInventoryPage(); break;
+                    }
+                });
+            });
+
+            // Quick Actions and Other Buttons
+            document.querySelectorAll('.action-card').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.querySelector('span').textContent;
+                    showNotification(`${action} clicked`, 'success');
+                });
+            });
+
+            viewAllOrders.addEventListener('click', (e) => {
+                e.preventDefault();
+                showOrdersPage();
+            });
+
+            viewAllProducts.addEventListener('click', (e) => {
+                e.preventDefault();
+                showProductsPage();
+            });
+
+            notificationBtn.addEventListener('click', () => {
+                showNotification('3 new notifications', 'info');
+            });
+
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('ultra-dark');
+                const icon = themeToggle.querySelector('i');
+                icon.classList.toggle('fa-moon');
+                icon.classList.toggle('fa-sun');
+            });
+
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    showNotification('Logging out...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                }
+            });
+
+            fab.addEventListener('click', showQuickActionMenu);
+
+            searchInput.addEventListener('input', () => {
+                const term = searchInput.value.toLowerCase();
+                showNotification(`Searching for "${term}"`, 'info');
+            });
+
+            // Fetch Dashboard Data
+            async function fetchDashboardData() {
+                try {
+                    const response = await fetch(`${API_BASE}/orders`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'Authorization': 'Bearer YOUR_TOKEN' // Uncomment if authentication is required
+                        }
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errorText || 'Orders endpoint not found'}`);
+                    }
+                    const orders = await response.json();
+                    updateDashboard(orders);
+                } catch (err) {
+                    console.error('Error fetching orders:', err.message);
+                    ordersList.innerHTML = '<p>Error loading orders. Please check the server configuration.</p>';
+                    showNotification(`Error loading dashboard: ${err.message}`, 'error');
+                }
+            }
+
+            // Update Dashboard
+            function updateDashboard(orders) {
+                ordersList.innerHTML = orders.slice(0, 3).map(order => `
+                    <div class="order-item">
+                        <div class="order-info">
+                            <span class="order-id">${order._id || 'N/A'}</span>
+                            <span class="customer-name">${order.email || 'Guest'}</span>
+                        </div>
+                        <div class="order-details">
+                            <span class="order-amount">₹${(order.finalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span class="order-status ${order.status?.toLowerCase() || 'pending'}">${order.status || 'Pending'}</span>
+                        </div>
+                    </div>
+                `).join('') || '<p>No orders available</p>';
+
+                const totalRevenue = orders.reduce((sum, order) => sum + (order.finalAmount || 0), 0);
+                const totalOrders = orders.length;
+                const uniqueCustomers = new Set(orders.map(order => order.email)).size;
+                const uniqueProducts = new Set(
+                    orders.flatMap(order => (order.items || []).map(item => item.name))
+                ).size;
+
+                updateStatCard(0, totalRevenue, true);
+                updateStatCard(1, totalOrders);
+                updateStatCard(2, uniqueCustomers);
+                updateStatCard(3, uniqueProducts);
+
+                const productMap = {};
+                orders.forEach(order => {
+                    (order.items || []).forEach(item => {
+                        productMap[item.name] = productMap[item.name] || { sales: 0, revenue: 0 };
+                        productMap[item.name].sales += (item.quantity || 1);
+                        productMap[item.name].revenue += (item.price || 0) * (item.quantity || 1);
+                    });
+                });
+
+                productsList.innerHTML = Object.entries(productMap)
+                    .sort(([, a], [, b]) => b.sales - a.sales)
+                    .slice(0, 3)
+                    .map(([name, data]) => `
+                        <div class="product-item">
+                            <div class="product-info">
+                                <span class="product-name">${name}</span>
+                                <span class="product-sales">${data.sales} sold</span>
+                            </div>
+                            <span class="product-revenue">₹${data.revenue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        </div>
+                    `).join('') || '<p>No products available</p>';
+
+                updateSalesChart(orders);
+            }
+
+            // Update Stat Card
+            function updateStatCard(index, value, isRevenue = false) {
+                const card = document.querySelectorAll('.stat-card')[index];
+                const valueElement = card.querySelector('.stat-value');
+                valueElement.dataset.target = Math.floor(value);
+                valueElement.textContent = isRevenue ? `₹${Math.floor(value).toLocaleString('en-IN')}` : value;
+                const changeElement = card.querySelector('.stat-change');
+                changeElement.className = `stat-change ${value >= 0 ? 'positive' : 'negative'}`;
+                changeElement.innerHTML = `<i class="fas fa-arrow-${value >= 0 ? 'up' : 'down'}"></i> ${Math.abs(value)}%`;
+            }
+
+            // Sales Chart
+            let salesChart;
+            function updateSalesChart(orders) {
+                const monthlySales = Array(12).fill(0);
+                orders.forEach(order => {
+                    const date = new Date(order.orderDate);
+                    if (!isNaN(date)) {
+                        monthlySales[date.getMonth()] += order.finalAmount || 0;
+                    }
+                });
+
+                if (salesChart) salesChart.destroy();
+                salesChart = new Chart(salesChartCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Sales',
+                            data: monthlySales,
+                            borderColor: '#fb641b',
+                            backgroundColor: 'rgba(251, 100, 27, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true, title: { display: true, text: 'Revenue (₹)' } },
+                            x: { title: { display: true, text: 'Month' } }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+            }
+
+            // Animate Counters
+            function animateCounters() {
+                document.querySelectorAll('.stat-value').forEach(counter => {
+                    const target = parseInt(counter.dataset.target) || 0;
+                    const isRevenue = counter.parentElement.querySelector('.stat-label').textContent === 'Total Revenue';
+                    let current = 0;
+                    const increment = target / 50;
+                    const update = () => {
+                        if (current < target) {
+                            current += increment;
+                            if (current > target) current = target;
+                            counter.textContent = isRevenue ? `₹${Math.floor(current).toLocaleString('en-IN')}` : Math.floor(current);
+                            requestAnimationFrame(update);
+                        }
+                    };
+                    update();
+                });
+            }
+
+            // Show Dashboard
+            function showDashboard() {
+                contentArea.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                            <div class="stat-content">
+                                <h3 class="stat-value" data-target="0">₹0</h3>
+                                <p class="stat-label">Total Revenue</p>
+                                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+                            <div class="stat-content">
+                                <h3 class="stat-value" data-target="0">0</h3>
+                                <p class="stat-label">Total Orders</p>
+                                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-content">
+                                <h3 class="stat-value" data-target="0">0</h3>
+                                <p class="stat-label">Customers</p>
+                                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-box"></i></div>
+                            <div class="stat-content">
+                                <h3 class="stat-value" data-target="0">0</h3>
+                                <p class="stat-label">Products</p>
+                                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card chart-card">
+                            <div class="card-header">
+                                <h3>Sales Overview</h3>
+                                <button class="btn-small"><i class="fas fa-download"></i></button>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Orders</h3>
+                                <a href="#" class="view-all" id="viewAllOrders">View All</a>
+                            </div>
+                            <div class="orders-list" id="ordersList"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Top Products</h3>
+                                <a href="#" class="view-all" id="viewAllProducts">View All</a>
+                            </div>
+                            <div class="products-list" id="productsList"></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Quick Actions</h3>
+                            </div>
+                            <div class="quick-actions">
+                                <button class="action-card"><i class="fas fa-plus"></i><span>Add Product</span></button>
+                                <button class="action-card"><i class="fas fa-file-invoice"></i><span>Create Order</span></button>
+                                <button class="action-card"><i class="fas fa-user-plus"></i><span>Add Customer</span></button>
+                                <button class="action-card"><i class="fas fa-chart-line"></i><span>View Reports</span></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                fetchDashboardData();
+                document.getElementById('viewAllOrders').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showOrdersPage();
+                });
+                document.getElementById('viewAllProducts').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showProductsPage();
+                });
+                document.querySelectorAll('.action-card').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const action = btn.querySelector('span').textContent;
+                        showNotification(`${action} clicked`, 'success');
+                    });
+                });
+            }
+
+            // Show Orders Page
+            async function showOrdersPage() {
+                try {
+                    const response = await fetch(`${API_BASE}/orders`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errorText || 'Orders endpoint not found'}`);
+                    }
+                    const orders = await response.json();
+                    const modal = document.createElement('div');
+                    modal.className = 'all-orders-modal';
+                    modal.innerHTML = `
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>All Orders (${orders.length})</h3>
+                                <button class="close-modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                ${orders.map(order => `
+                                    <div class="order-item">
+                                        <div class="order-info">
+                                            <span class="order-id">${order._id || 'N/A'}</span>
+                                            <span class="customer-name">${order.email || 'Guest'}</span>
+                                        </div>
+                                        <div class="order-details">
+                                            <span class="order-amount">₹${(order.finalAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                            <span class="order-status ${order.status?.toLowerCase() || 'pending'}">${order.status || 'Pending'}</span>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p>No orders available</p>'}
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                    modal.querySelector('.close-modal').addEventListener('click', () => {
+                        document.body.removeChild(modal);
+                    });
+                } catch (err) {
+                    showNotification(`Error loading orders: ${err.message}`, 'error');
+                }
+            }
+
+            // Show Products Page
+            async function showProductsPage() {
+                try {
+                    const response = await fetch(`${API_BASE}/products`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errorText || 'Products endpoint not found'}`);
+                    }
+                    const products = await response.json();
+                    contentArea.innerHTML = `
+                        <div class="products-page">
+                            <div class="page-header">
+                                <h2>Products</h2>
+                                <button class="btn-primary"><i class="fas fa-plus"></i> Add Product</button>
+                            </div>
+                            <div class="products-grid">
+                                ${products.map(product => `
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '<i class="fas fa-box"></i>'}
+                                        </div>
+                                        <div class="product-info">
+                                            <h3>${product.name || 'Unnamed'}</h3>
+                                            <p class="product-price">₹${(product.price || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                                            <p class="product-stock">Stock: ${product.stock || 0}</p>
+                                        </div>
+                                    </div>
+                                `).join('') || '<p>No products available</p>'}
+                            </div>
+                        </div>
+                    `;
+                    contentArea.querySelector('.btn-primary').addEventListener('click', () => {
+                        showNotification('Add Product clicked', 'success');
+                    });
+                } catch (err) {
+                    contentArea.innerHTML = '<p>Error loading products. Please check the server configuration.</p>';
+                    showNotification(`Error loading products: ${err.message}`, 'error');
+                }
+            }
+
+            // Show Customers Page
+            async function showCustomersPage() {
+                try {
+                    const response = await fetch(`${API_BASE}/customers`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errorText || 'Customers endpoint not found'}`);
+                    }
+                    const customers = await response.json();
+                    contentArea.innerHTML = `
+                        <div class="customers-page">
+                            <div class="page-header">
+                                <h2>Customers</h2>
+                                <button class="btn-primary"><i class="fas fa-plus"></i> Add Customer</button>
+                            </div>
+                            <div class="customers-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Orders</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${customers.map(customer => `
+                                            <tr>
+                                                <td>${customer.name || 'N/A'}</td>
+                                                <td>${customer.email || 'N/A'}</td>
+                                                <td>${customer.orderCount || 0}</td>
+                                            </tr>
+                                        `).join('') || '<tr><td colspan="3">No customers available</td></tr>'}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    contentArea.querySelector('.btn-primary').addEventListener('click', () => {
+                        showNotification('Add Customer clicked', 'success');
+                    });
+                } catch (err) {
+                    contentArea.innerHTML = '<p>Error loading customers. Please check the server configuration.</p>';
+                    showNotification(`Error loading customers: ${err.message}`, 'error');
+                }
+            }
+
+            // Show Inventory Page
+            async function showInventoryPage() {
+                try {
+                    const response = await fetch(`${API_BASE}/products`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP ${response.status}: ${errorText || 'Products endpoint not found'}`);
+                    }
+                    const products = await response.json();
+                    const stats = {
+                        total: products.length,
+                        lowStock: products.filter(p => p.stock < 10).length,
+                        outOfStock: products.filter(p => p.stock === 0).length
+                    };
+                    contentArea.innerHTML = `
+                        <div class="inventory-page">
+                            <div class="page-header">
+                                <h2>Inventory</h2>
+                                <button class="btn-primary"><i class="fas fa-sync"></i> Update Inventory</button>
+                            </div>
+                            <div class="inventory-stats">
+                                <div class="stat-card">
+                                    <h3>Total Products</h3>
+                                    <p>${stats.total}</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h3>Low Stock</h3>
+                                    <p>${stats.lowStock}</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h3>Out of Stock</h3>
+                                    <p>${stats.outOfStock}</p>
+                                </div>
+                            </div>
+                            <div class="inventory-list">
+                                <h3>Low Stock Items</h3>
+                                <ul>
+                                    ${products.filter(p => p.stock < 10).slice(0, 5).map(p => `
+                                        <li>
+                                            <span>${p.name}</span>
+                                            <span class="stock-level ${p.stock < 3 ? 'critical' : 'warning'}">${p.stock} remaining</span>
+                                        </li>
+                                    `).join('') || '<li>No low stock items</li>'}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    contentArea.querySelector('.btn-primary').addEventListener('click', () => {
+                        showNotification('Inventory update started', 'info');
+                    });
+                } catch (err) {
+                    contentArea.innerHTML = '<p>Error loading inventory. Please check the server configuration.</p>';
+                    showNotification(`Error loading inventory: ${err.message}`, 'error');
+                }
+            }
+
+            // Quick Action Menu
+            function showQuickActionMenu() {
+                const menu = document.createElement('div');
+                menu.className = 'quick-action-menu';
+                menu.innerHTML = `
+                    <div class="quick-action-item" data-action="add-product"><i class="fas fa-plus"></i><span>Add Product</span></div>
+                    <div class="quick-action-item" data-action="create-order"><i class="fas fa-file-invoice"></i><span>Create Order</span></div>
+                    <div class="quick-action-item" data-action="add-customer"><i class="fas fa-user-plus"></i><span>Add Customer</span></div>
+                    <div class="quick-action-item" data-action="view-reports"><i class="fas fa-chart-line"></i><span>View Reports</span></div>
+                `;
+                menu.style.cssText = `
+                    position: fixed; bottom: 80px; right: 20px; background: var(--card-bg);
+                    border-radius: 8px; box-shadow: var(--shadow-medium); padding: 10px;
+                    transform: scale(0); transition: transform 0.3s ease;
+                `;
+                const style = document.createElement('style');
+                style.textContent = `
+                    .quick-action-item {
+                        display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+                        cursor: pointer; border-radius: 6px; color: var(--text-primary);
+                    }
+                    .quick-action-item:hover { background: var(--hover-bg); }
+                `;
+                document.head.appendChild(style);
+                document.body.appendChild(menu);
+                setTimeout(() => menu.style.transform = 'scale(1)', 10);
+                menu.querySelectorAll('.quick-action-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        showNotification(`${item.querySelector('span').textContent} clicked`, 'success');
+                        document.body.removeChild(menu);
+                        document.head.removeChild(style);
+                    });
+                });
+                document.addEventListener('click', (e) => {
+                    if (!menu.contains(e.target) && !fab.contains(e.target)) {
+                        document.body.removeChild(menu);
+                        document.head.removeChild(style);
+                    }
+                }, { once: true });
+            }
+
+            // Notification
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.style.transform = 'translateX(0)', 10);
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => document.body.removeChild(notification), 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
+```
