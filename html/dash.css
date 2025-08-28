@@ -1,3 +1,4 @@
+/* dash.css */
 * {
     margin: 0;
     padding: 0;
@@ -14,6 +15,7 @@ body {
     color: #ffffff;
     line-height: 1.6;
     overflow-x: hidden;
+    padding-top: 60px; /* Added to prevent content overlap with fixed navbar */
 }
 
 /* Animations */
@@ -28,12 +30,45 @@ body {
     }
 }
 
-@keyframes glow {
+@keyframes fadeInUp {
     from {
-        text-shadow: 0 0 5px rgba(99, 102, 241, 0.5);
+        transform: translateY(50px);
+        opacity: 0;
     }
     to {
-        text-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 30px rgba(236, 72, 153, 0.5);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 
@@ -43,41 +78,23 @@ body {
     100% { background-position: 0% 50%; }
 }
 
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+    }
+}
+
 @keyframes cardSlideUp {
     from {
-        opacity: 0;
         transform: translateY(50px);
+        opacity: 0;
     }
     to {
-        opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
         opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
     }
 }
 
@@ -98,18 +115,19 @@ body {
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
-    padding: 0.75rem 0; /* Reduced padding for mobile */
+    padding: 0.75rem 0;
+    height: 60px; /* Fixed height for consistent padding calculation */
     animation: slideDown 0.8s ease-out;
 }
 
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 0.75rem;
+    padding: 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .logo {
@@ -119,7 +137,7 @@ body {
 }
 
 .logo-text {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-size: clamp(1rem, 3vw, 1.2rem);
     font-weight: 800;
     background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
     -webkit-background-clip: text;
@@ -133,11 +151,13 @@ body {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.6);
     letter-spacing: 2px;
-    margin-top: -5px;
+    margin-top: -4px;
 }
 
 .nav-menu {
-    gap: 0.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .nav-link {
@@ -147,7 +167,7 @@ body {
     font-size: clamp(0.8rem, 2vw, 0.9rem);
     transition: all 0.3s ease;
     position: relative;
-    padding: 0.5rem 0;
+    padding: 0.4rem 0;
 }
 
 .nav-link:hover,
@@ -172,21 +192,25 @@ body {
 }
 
 .nav-actions {
-    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .search-container {
     position: relative;
+    flex: 1;
+    max-width: 200px;
 }
 
 .search-input {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 25px;
+    border-radius: 20px;
     padding: 0.5rem 1rem 0.5rem 2.5rem;
     color: #fff;
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
-    width: clamp(120px, 30vw, 200px);
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    width: 100%;
     transition: all 0.3s ease;
 }
 
@@ -206,23 +230,24 @@ body {
     border: none;
     color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem;
 }
 
 .search-btn svg {
-    width : 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
 }
 
 .cart-btn {
     position: relative;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 0.5rem;
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    touch-action: manipulation;
 }
 
 .cart-btn:hover {
@@ -231,8 +256,8 @@ body {
 }
 
 .cart-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
 }
 
 .cart-count {
@@ -252,12 +277,15 @@ body {
 }
 
 .user-profile {
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 25px;
+    padding: 0.4rem;
+    border-radius: 20px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .user-profile:hover {
@@ -277,13 +305,29 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
+.logout-btn {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
+    transition: background 0.3s ease;
+    touch-action: manipulation;
+}
+
+.logout-btn:hover {
+    background: #dc2626;
+}
+
 /* Hero Section */
 .hero-section {
-    min-height: 80vh; /* Adjusted for mobile */
+    min-height: 80vh;
     display: flex;
     align-items: center;
     position: relative;
-    padding: 6rem 0.75rem 3rem;
+    padding: 6rem 1rem 2rem;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
 }
 
@@ -309,13 +353,22 @@ body {
 .hero-content {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+}
+
+.hero-text {
+    animation: fadeInUp 1s ease-out;
 }
 
 .hero-title {
-    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 800;
     line-height: 1.2;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .title-line {
@@ -337,39 +390,44 @@ body {
 }
 
 .hero-subtitle {
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    font-size: clamp(0.9rem, 2vw, 1rem);
     color: rgba(255, 255, 255, 0.8);
-    max-width: 90%;
-    margin: 0 auto 1.5rem;
+    max-width: 95%;
+    margin-bottom: 1.5rem;
     line-height: 1.6;
     animation: fadeIn 1s ease-out 0.6s both;
 }
 
 .hero-buttons {
-    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+    animation: fadeIn 1s ease-out 0.9s both;
 }
 
 .btn-primary, .btn-secondary {
-    padding: 0.6rem 1.2rem;
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 10px;
     font-weight: 600;
     font-size: clamp(0.85rem, 2vw, 0.9rem);
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    touch-action: manipulation;
+    min-width: 120px;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: white;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
 }
 
 .btn-secondary {
@@ -384,22 +442,27 @@ body {
 }
 
 .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
     animation: fadeInRight 1s ease-out 1.2s both;
 }
 
 .stat-item {
     text-align: center;
-    padding: 0.75rem;
+    padding: 1rem;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     transition: all 0.3s ease;
+    flex: 1 1 45%;
+    max-width: 180px;
 }
 
 .stat-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -414,7 +477,7 @@ body {
 }
 
 .stat-label {
-    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     color: rgba(255, 255, 255, 0.7);
     font-weight: 500;
 }
@@ -422,14 +485,15 @@ body {
 /* Section Headers */
 .section-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
+    padding-top: 4rem;
     animation: fadeInUp 0.8s ease-out;
 }
 
 .section-title {
     font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: 700;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.75rem;
     background: linear-gradient(135deg, #ffffff, #e5e7eb);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -439,7 +503,7 @@ body {
 .section-subtitle {
     font-size: clamp(0.9rem, 2vw, 1rem);
     color: rgba(255, 255, 255, 0.7);
-    max-width: 90%;
+    max-width: 95%;
     margin: 0 auto;
 }
 
@@ -447,6 +511,12 @@ body {
 .categories-section {
     padding: 3rem 0;
     background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+}
+
+.categories-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .category-card {
@@ -460,6 +530,7 @@ body {
     opacity: 0;
     transform: translateY(50px);
     animation: cardSlideUp 0.8s ease-out forwards;
+    width: 100%;
 }
 
 .category-card:nth-child(2) { animation-delay: 0.2s; }
@@ -467,10 +538,10 @@ body {
 .category-card:nth-child(4) { animation-delay: 0.6s; }
 
 .category-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .category-image {
@@ -487,15 +558,15 @@ body {
 }
 
 .category-card:hover .category-image img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 .category-content {
-    padding: 0.75rem;
+    padding: 1rem;
 }
 
 .category-content h3 {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: #fff;
@@ -503,12 +574,12 @@ body {
 
 .category-content p {
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 0.5rem;
     font-size: clamp(0.8rem, 2vw, 0.85rem);
+    margin-bottom: 0.5rem;
 }
 
 .category-count {
-    font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     color: #6366f1;
     font-weight: 500;
 }
@@ -517,6 +588,12 @@ body {
 .products-section {
     padding: 3rem 0;
     background: #0a0a0a;
+}
+
+.products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .product-card {
@@ -529,6 +606,7 @@ body {
     opacity: 0;
     transform: translateY(50px);
     animation: cardSlideUp 0.8s ease-out forwards;
+    width: 100%;
 }
 
 .product-card:nth-child(2) { animation-delay: 0.1s; }
@@ -538,10 +616,10 @@ body {
 .product-card:nth-child(6) { animation-delay: 0.5s; }
 
 .product-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .product-image {
@@ -558,7 +636,7 @@ body {
 }
 
 .product-card:hover .product-image img {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 .product-overlay {
@@ -574,6 +652,7 @@ body {
     gap: 0.75rem;
     opacity: 0;
     transition: all 0.3s ease;
+    flex-wrap: wrap;
 }
 
 .product-card:hover .product-overlay {
@@ -581,14 +660,15 @@ body {
 }
 
 .quick-view-btn, .add-to-cart-btn {
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    transform: translateY(20px);
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
+    transform: translateY(15px);
+    font-size: clamp(0.75rem, 2vw, 0.8rem);
+    touch-action: manipulation;
 }
 
 .product-card:hover .quick-view-btn,
@@ -613,7 +693,7 @@ body {
     left: 0.75rem;
     padding: 0.4rem 0.8rem;
     border-radius: 16px;
-    font-size: 0.75rem;
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -633,11 +713,11 @@ body {
 }
 
 .product-info {
-    padding: 0.75rem;
+    padding: 1rem;
 }
 
 .product-title {
-    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: #fff;
@@ -645,25 +725,25 @@ body {
 
 .product-description {
     color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(0.75rem, 2vw, 0.8rem);
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
     margin-bottom: 0.5rem;
 }
 
 .product-rating {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     margin-bottom: 0.5rem;
 }
 
 .stars {
     color: #fbbf24;
-    font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
 }
 
 .rating-count {
     color: rgba(255, 255, 255, 0.6);
-    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
 }
 
 .product-price {
@@ -673,13 +753,13 @@ body {
 }
 
 .current-price {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.2rem);
     font-weight: 700;
     color: #6366f1;
 }
 
 .original-price {
-    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: rgba(255, 255, 255, 0.5);
     text-decoration: line-through;
 }
@@ -690,10 +770,23 @@ body {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
+.deals-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
 .deals-title {
     font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: 700;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.75rem;
     background: linear-gradient(135deg, #ec4899, #f59e0b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -703,30 +796,34 @@ body {
 .deals-subtitle {
     font-size: clamp(0.9rem, 2vw, 1rem);
     color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
 .countdown-timer {
-    margin-bottom: 1.2rem;
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .timer-item {
     text-align: center;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    padding: 0.6rem;
+    padding: 0.75rem;
     min-width: 60px;
 }
 
 .timer-number {
     display: block;
-    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
     font-weight: 700;
     color: #ec4899;
 }
 
 .timer-label {
-    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -736,18 +833,27 @@ body {
     background: linear-gradient(135deg, #ec4899, #f59e0b);
     color: white;
     border: none;
-    padding: 0.6rem 1.2rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 10px;
     font-weight: 600;
     font-size: clamp(0.85rem, 2vw, 0.9rem);
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+    box-shadow: 0 6px 24px rgba(236, 72, 153, 0.3);
+    touch-action: manipulation;
 }
 
 .deals-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.4);
+}
+
+.deals-image img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 /* Newsletter Section */
@@ -758,7 +864,7 @@ body {
 
 .newsletter-content {
     text-align: center;
-    max-width: 90%;
+    max-width: 95%;
     margin: 0 auto;
     animation: fadeInUp 0.8s ease-out;
 }
@@ -766,11 +872,8 @@ body {
 .newsletter-title {
     font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: 700;
-    margin-bottom: 0.8rem;
-    background: linear-gradient(135deg, #ffffff, #e5e7eb);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    margin-bottom: 0.75rem;
+    color: #fff;
 }
 
 .newsletter-subtitle {
@@ -780,81 +883,97 @@ body {
 }
 
 .newsletter-form {
+    display: flex;
     gap: 0.75rem;
+    max-width: 95%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .newsletter-input {
+    flex: 1;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    padding: 0.75rem;
     color: #fff;
     font-size: clamp(0.8rem, 2vw, 0.85rem);
-    transition: all 0.3s ease;
+    min-width: 200px;
 }
 
 .newsletter-input:focus {
     outline: none;
     border-color: #6366f1;
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .newsletter-btn {
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: white;
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 20px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
     font-weight: 600;
     font-size: clamp(0.85rem, 2vw, 0.9rem);
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.3);
+    touch-action: manipulation;
 }
 
 .newsletter-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
 }
 
 /* Footer */
 .footer {
-    padding: 3rem 0 1.5rem;
     background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    padding: 3rem 0 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer-logo {
-    margin-bottom: 0.8rem;
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.footer-section {
+    flex: 1 1 100%;
+    text-align: center;
+}
+
+.footer-section h3 {
+    color: #fff;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
 }
 
 .footer-description {
     color: rgba(255, 255, 255, 0.7);
     font-size: clamp(0.8rem, 2vw, 0.85rem);
-    max-width: 90%;
-    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
 }
 
 .social-links {
+    display: flex;
     gap: 0.75rem;
+    justify-content: center;
 }
 
 .social-link {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
     font-size: clamp(0.8rem, 2vw, 0.85rem);
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .social-link:hover {
     color: #6366f1;
-}
-
-.footer-title {
-    font-size: clamp(1.1rem, 2.5vw, 1.2rem);
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-    color: #fff;
 }
 
 .footer-links {
@@ -869,7 +988,7 @@ body {
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     font-size: clamp(0.8rem, 2vw, 0.85rem);
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
@@ -883,80 +1002,106 @@ body {
 }
 
 .footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 1.2rem;
-    margin-top: 1.5rem;
-}
-
-.footer-bottom p {
     color: rgba(255, 255, 255, 0.6);
-    font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 991px) {
-    .nav-container {
-        flex-wrap: wrap;
-    }
-    .nav-menu {
-        width: 100%;
-    }
-    .nav-actions {
-        width: 100%;
-        justify-content: flex-end;
-    }
-    .search-input {
-        width: 100%;
-    }
-    .hero-title {
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
-    }
-    .hero-subtitle {
-        font-size: clamp(0.9rem, 2vw, 1rem);
-    }
-    .stat-item {
-        padding: 0.75rem;
-    }
-    .stat-number {
-        font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-    }
-}
-
-@media (max-width: 576px) {
+/* Responsive Design */
+@media (max-width: 1200px) {
     .container {
         padding: 0 0.75rem;
     }
+    .nav-container {
+        padding: 0 0.75rem;
+    }
+    .hero-section {
+        padding: 5rem 0.75rem 2rem;
+        min-height: 70vh;
+    }
+    .section-header {
+        padding-top: 3.5rem;
+    }
+}
+
+@media (max-width: 991px) {
+    .nav-container {
+        flex-wrap: wrap;
+        padding: 0 0.5rem;
+        gap: 0.5rem;
+    }
+    .nav-menu {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem 0;
+        display: none;
+    }
+    .nav-menu.active {
+        display: flex;
+    }
+    .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .search-container {
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .hero-content {
+        gap: 1.5rem;
+    }
+    .hero-title {
+        font-size: clamp(1.6rem, 4.5vw, 2.5rem);
+    }
+    .hero-subtitle {
+        font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+    .hero-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    .stat-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+    .deals-banner {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+    .footer-content {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
     .navbar {
         padding: 0.5rem 0;
     }
     .nav-container {
-        gap: 0.5rem;
-    }
-    .logo-text {
-        font-size: clamp(1rem, 3vw, 1.2rem);
-    }
-    .logo-subtitle {
-        font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+        padding: 0 0.5rem;
+        gap: 0.4rem;
     }
     .nav-link {
         font-size: clamp(0.75rem, 2vw, 0.85rem);
-        padding: 0.4rem 0;
     }
     .search-input {
-        width: 100%;
-        padding: 0.5rem 1rem 0.5rem 2.5rem;
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
+        padding: 0.4rem 0.8rem 0.4rem 2rem;
+        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
     }
     .search-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
     }
     .cart-btn {
-        padding: 0.5rem;
+        padding: 0.4rem;
     }
     .cart-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
     }
     .cart-count {
         width: 16px;
@@ -964,53 +1109,123 @@ body {
         font-size: 0.65rem;
     }
     .user-profile {
-        padding: 0.4rem;
+        padding: 0.3rem;
+        gap: 0.3rem;
     }
     .profile-img {
         width: 24px;
         height: 24px;
     }
     .profile-name {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
+        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+    }
+    .logout-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
     }
     .hero-section {
-        padding: 5rem 0.75rem 2rem;
-        min-height: 70vh;
-    }
-    .hero-title {
-        font-size: clamp(1.5rem, 5vw, 2rem);
-        line-height: 1.2;
-    }
-    .hero-subtitle {
-        font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-        max-width: 95%;
+        padding: 4.5rem 0.5rem 1.5rem;
+        min-height: 65vh;
     }
     .hero-buttons {
         flex-direction: column;
-        align-items: stretch;
         gap: 0.75rem;
     }
     .btn-primary, .btn-secondary {
         width: 100%;
         padding: 0.6rem;
-        font-size: clamp(0.8rem, 2vw, 0.85rem);
     }
-    .hero-stats {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.75rem;
+    .category-image {
+        height: 160px;
+    }
+    .product-image {
+        height: 200px;
+    }
+    .quick-view-btn, .add-to-cart-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: clamp(0.7rem, 1.8vw, 0.75rem);
+    }
+    .newsletter-form {
+        flex-direction: column;
+        align-items: center;
+    }
+    .newsletter-input {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0.4rem 0;
+    }
+    .nav-container {
+        padding: 0 0.4rem;
+    }
+    .logo-text {
+        font-size: clamp(0.9rem, 3vw, 1rem);
+    }
+    .logo-subtitle {
+        font-size: clamp(0.45rem, 1.5vw, 0.55rem);
+    }
+    .nav-link {
+        font-size: clamp(0.7rem, 2vw, 0.8rem);
+    }
+    .search-container {
+        max-width: 100%;
+    }
+    .search-input {
+        font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+        padding: 0.3rem 0.6rem 0.3rem 1.8rem;
+    }
+    .search-btn svg {
+        width: 10px;
+        height: 10px;
+    }
+    .cart-btn {
+        padding: 0.3rem;
+    }
+    .cart-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    .cart-count {
+        width: 14px;
+        height: 14px;
+        font-size: 0.6rem;
+    }
+    .user-profile {
+        padding: 0.25rem;
+    }
+    .profile-img {
+        width: 20px;
+        height: 20px;
+    }
+    .profile-name {
+        display: none;
+    }
+    .logout-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+    }
+    .hero-section {
+        padding: 4rem 0.5rem 1rem;
+        min-height: 60vh;
+    }
+    .hero-title {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+    }
+    .hero-subtitle {
+        font-size: clamp(0.8rem, 2vw, 0.9rem);
     }
     .stat-item {
-        flex: 1 1 45%;
-        padding: 0.5rem;
-        min-width: 100px;
+        padding: 0.75rem;
     }
     .stat-number {
         font-size: clamp(1rem, 2.5vw, 1.2rem);
     }
     .stat-label {
-        font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
     }
     .categories-section, .products-section, .deals-section, .newsletter-section {
         padding: 2rem 0;
@@ -1018,57 +1233,38 @@ body {
     .category-image {
         height: 140px;
     }
-    .category-content {
-        padding: 0.5rem;
-    }
-    .category-content h3 {
-        font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-    }
-    .category-content p {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .category-count {
-        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
-    }
     .product-image {
         height: 180px;
-    }
-    .product-info {
-        padding: 0.5rem;
-    }
-    .product-title {
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
-    }
-    .product-description {
-        font-size: clamp(0.7rem, 2vw, 0.75rem);
-    }
-    .product-rating {
-        gap: 0.4rem;
-    }
-    .stars {
-        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
-    }
-    .rating-count {
-        font-size: clamp(0.6rem, 1.5vw, 0.7rem);
-    }
-    .current-price {
-        font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-    }
-    .original-price {
-        font-size: clamp(0.75rem, 2vw, 0.85rem);
-    }
-    .quick-view-btn, .add-to-cart-btn {
-        padding: 0.5rem 1rem;
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
     }
     .product-badge {
         top: 0.5rem;
         left: 0.5rem;
         padding: 0.3rem 0.6rem;
-        font-size: 0.7rem;
+        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
+    }
+    .category-content, .product-info {
+        padding: 0.75rem;
+    }
+    .category-content h3, .product-title {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    .category-content p, .product-description {
+        font-size: clamp(0.75rem, 1.8vw, 0.8rem);
+    }
+    .category-count, .rating-count {
+        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+    }
+    .stars {
+        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+    }
+    .current-price {
+        font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    .original-price {
+        font-size: clamp(0.8rem, 1.8vw, 0.85rem);
     }
     .deals-title {
-        font-size: clamp(1.5rem, 3vw, 1.8rem);
+        font-size: clamp(1.6rem, 3.5vw, 2rem);
     }
     .deals-subtitle {
         font-size: clamp(0.85rem, 2vw, 0.95rem);
@@ -1081,125 +1277,109 @@ body {
         font-size: clamp(1rem, 2.5vw, 1.2rem);
     }
     .timer-label {
-        font-size: clamp(0.6rem, 1.5vw, 0.7rem);
+        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
     }
     .deals-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: clamp(0.8rem, 2vw, 0.85rem);
+        padding: 0.6rem 1rem;
+        font-size: clamp(0.8rem, 1.8vw, 0.85rem);
     }
     .newsletter-title {
-        font-size: clamp(1.5rem, 3vw, 1.8rem);
+        font-size: clamp(1.6rem, 3.5vw, 2rem);
     }
     .newsletter-subtitle {
         font-size: clamp(0.85rem, 2vw, 0.95rem);
-    }
-    .newsletter-input {
-        padding: 0.5rem 1rem;
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .newsletter-btn {
-        padding: 0.5rem 1.2rem;
-        font-size: clamp(0.8rem, 2vw, 0.85rem);
-    }
-    .footer {
-        padding: 2rem 0 1rem;
-    }
-    .footer-description {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .social-link {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .footer-title {
-        font-size: clamp(1rem, 2.5vw, 1.1rem);
-    }
-    .footer-links a {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .contact-info p {
-        font-size: clamp(0.75rem, 2vw, 0.8rem);
-    }
-    .footer-bottom p {
-        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
     }
 }
 
 @media (max-width: 400px) {
     .container {
-        padding: 0 0.5rem;
+        padding: 0 0.4rem;
     }
     .navbar {
-        padding: 0.4rem 0;
+        padding: 0.3rem 0;
+    }
+    .nav-container {
+        padding: 0 0.3rem;
+        gap: 0.3rem;
     }
     .logo-text {
-        font-size: clamp(0.9rem, 3vw, 1rem);
+        font-size: clamp(0.8rem, 3vw, 0.9rem);
     }
     .logo-subtitle {
-        font-size: clamp(0.45rem, 1.5vw, 0.5rem);
-    }
-    .nav-link {
-        font-size: clamp(0.7rem, 2vw, 0.8rem);
+        font-size: clamp(0.4rem, 1.5vw, 0.5rem);
     }
     .search-input {
-        padding: 0.4rem 1rem 0.4rem 2rem;
-        font-size: clamp(0.7rem, 2vw, 0.75rem);
+        padding: 0.3rem 0.6rem 0.3rem 1.6rem;
+        font-size: clamp(0.6rem, 1.8vw, 0.7rem);
     }
     .search-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 10px;
+        height: 10px;
     }
     .cart-btn {
-        padding: 0.4rem;
+        padding: 0.25rem;
     }
     .cart-btn svg {
-        width: 14px;
-        height: 14px;
+        width: 10px;
+        height: 10px;
     }
     .cart-count {
-        width: 14px;
-        height: 14px;
-        font-size: 0.6rem;
+        width: 12px;
+        height: 12px;
+        font-size: 0.55rem;
+    }
+    .user-profile {
+        padding: 0.2rem;
     }
     .profile-img {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
+    }
+    .logout-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: clamp(0.6rem, 1.8vw, 0.7rem);
     }
     .hero-section {
-        padding: 4rem 0.5rem 1.5rem;
-        min-height: 60vh;
+        padding: 3.5rem 0.4rem 1rem;
+        min-height: 55vh;
     }
     .hero-title {
-        font-size: clamp(1.3rem, 5vw, 1.8rem);
+        font-size: clamp(1.2rem, 4vw, 1.8rem);
     }
     .hero-subtitle {
-        font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
     }
     .stat-item {
-        flex: 1 1 100%; /* Stack stats vertically */
-        min-width: 80px;
+        padding: 0.5rem;
     }
     .stat-number {
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    .stat-label {
+        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
     }
     .category-image {
-        height: 120px;
+        height: 130px;
     }
     .product-image {
         height: 160px;
     }
     .quick-view-btn, .add-to-cart-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: clamp(0.7rem, 2vw, 0.75rem);
+        padding: 0.3rem 0.6rem;
+        font-size: clamp(0.65rem, 1.8vw, 0.7rem);
     }
     .product-badge {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
     }
     .timer-item {
         min-width: 45px;
         padding: 0.4rem;
     }
     .timer-number {
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+    .timer-label {
+        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
     }
 }
