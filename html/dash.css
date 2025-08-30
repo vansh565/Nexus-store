@@ -1,4 +1,4 @@
-/* dash.css */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +15,7 @@ body {
     color: #ffffff;
     line-height: 1.6;
     overflow-x: hidden;
-    padding-top: 60px; /* Added to prevent content overlap with fixed navbar */
+    padding-top: 60px; /* Prevents content overlap with fixed navbar */
 }
 
 /* Animations */
@@ -116,7 +116,7 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
     padding: 0.75rem 0;
-    height: 60px; /* Fixed height for consistent padding calculation */
+    height: 60px; /* Fixed height for consistent layout */
     animation: slideDown 0.8s ease-out;
 }
 
@@ -692,24 +692,23 @@ body {
     top: 0.75rem;
     left: 0.75rem;
     padding: 0.4rem 0.8rem;
-    border-radius: 16px;
-    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+    border-radius: 12px;
+    font-size: clamp(0.7rem, 1.8vw, 0.75rem);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.product-badge {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-}
-
-.product-badge.new {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    z-index: 2;
 }
 
 .product-badge.sale {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+}
+
+.product-badge.new {
+    background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.product-badge.hot {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
 }
 
 .product-info {
@@ -724,26 +723,26 @@ body {
 }
 
 .product-description {
-    color: rgba(255, 255, 255, 0.7);
     font-size: clamp(0.8rem, 2vw, 0.85rem);
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: 0.5rem;
 }
 
 .product-rating {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
 .stars {
-    color: #fbbf24;
     font-size: clamp(0.75rem, 1.8vw, 0.8rem);
+    color: #f59e0b;
 }
 
 .rating-count {
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     color: rgba(255, 255, 255, 0.6);
-    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
 }
 
 .product-price {
@@ -753,13 +752,13 @@ body {
 }
 
 .current-price {
-    font-size: clamp(1.1rem, 2.5vw, 1.2rem);
-    font-weight: 700;
-    color: #6366f1;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    color: #fff;
 }
 
 .original-price {
-    font-size: clamp(0.85rem, 2vw, 0.9rem);
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
     color: rgba(255, 255, 255, 0.5);
     text-decoration: line-through;
 }
@@ -767,27 +766,27 @@ body {
 /* Deals Section */
 .deals-section {
     padding: 3rem 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
 }
 
 .deals-banner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    align-items: center;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 2rem;
     animation: fadeInUp 0.8s ease-out;
 }
 
+.deals-content {
+    text-align: center;
+}
+
 .deals-title {
-    font-size: clamp(1.8rem, 4vw, 2.2rem);
+    font-size: clamp(1.8rem, 4vw, 2rem);
     font-weight: 700;
     margin-bottom: 0.75rem;
-    background: linear-gradient(135deg, #ec4899, #f59e0b);
+    background: linear-gradient(135deg, #ffffff, #e5e7eb);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -795,65 +794,63 @@ body {
 
 .deals-subtitle {
     font-size: clamp(0.9rem, 2vw, 1rem);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: 1.5rem;
 }
 
 .countdown-timer {
     display: flex;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
 }
 
 .timer-item {
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
     padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     min-width: 60px;
 }
 
 .timer-number {
     display: block;
-    font-size: clamp(1.2rem, 3vw, 1.4rem);
-    font-weight: 700;
-    color: #ec4899;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .timer-label {
-    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
     color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .deals-btn {
-    background: linear-gradient(135deg, #ec4899, #f59e0b);
-    color: white;
-    border: none;
     padding: 0.75rem 1.5rem;
+    border: none;
     border-radius: 10px;
     font-weight: 600;
     font-size: clamp(0.85rem, 2vw, 0.9rem);
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 6px 24px rgba(236, 72, 153, 0.3);
     touch-action: manipulation;
 }
 
 .deals-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(236, 72, 153, 0.4);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
 }
 
 .deals-image img {
-    width: 100%;
-    height: auto;
-    max-height: 250px;
-    object-fit: cover;
     border-radius: 12px;
+    max-height: 300px;
+    object-fit: cover;
 }
 
 /* Newsletter Section */
@@ -864,16 +861,19 @@ body {
 
 .newsletter-content {
     text-align: center;
-    max-width: 95%;
+    max-width: 600px;
     margin: 0 auto;
     animation: fadeInUp 0.8s ease-out;
 }
 
 .newsletter-title {
-    font-size: clamp(1.8rem, 4vw, 2.2rem);
+    font-size: clamp(1.8rem, 4vw, 2rem);
     font-weight: 700;
     margin-bottom: 0.75rem;
-    color: #fff;
+    background: linear-gradient(135deg, #ffffff, #e5e7eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .newsletter-subtitle {
@@ -885,21 +885,19 @@ body {
 .newsletter-form {
     display: flex;
     gap: 0.75rem;
-    max-width: 95%;
-    margin: 0 auto;
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .newsletter-input {
-    flex: 1;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     color: #fff;
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
-    min-width: 200px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
+    min-width: 250px;
+    transition: all 0.3s ease;
 }
 
 .newsletter-input:focus {
@@ -909,16 +907,15 @@ body {
 }
 
 .newsletter-btn {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    border: none;
     padding: 0.75rem 1.5rem;
+    border: none;
     border-radius: 10px;
     font-weight: 600;
     font-size: clamp(0.85rem, 2vw, 0.9rem);
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.3);
     touch-action: manipulation;
 }
 
@@ -929,46 +926,43 @@ body {
 
 /* Footer */
 .footer {
+    padding: 3rem 0 1rem;
     background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
-    padding: 3rem 0 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-content {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .footer-section {
-    flex: 1 1 100%;
-    text-align: center;
+    flex: 1 1 200px;
 }
 
-.footer-section h3 {
-    color: #fff;
-    font-size: clamp(1rem, 2.5vw, 1.1rem);
-    font-weight: 600;
-    margin-bottom: 0.75rem;
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
 }
 
 .footer-description {
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
-    line-height: 1.6;
     margin-bottom: 1rem;
 }
 
 .social-links {
     display: flex;
     gap: 0.75rem;
-    justify-content: center;
 }
 
 .social-link {
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
     font-size: clamp(0.8rem, 2vw, 0.85rem);
+    text-decoration: none;
     transition: color 0.3s ease;
 }
 
@@ -976,18 +970,25 @@ body {
     color: #6366f1;
 }
 
+.footer-title {
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
 .footer-links {
     list-style: none;
 }
 
 .footer-links li {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .footer-links a {
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     transition: color 0.3s ease;
 }
 
@@ -996,154 +997,87 @@ body {
 }
 
 .contact-info p {
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
     color: rgba(255, 255, 255, 0.7);
-    font-size: clamp(0.8rem, 2vw, 0.85rem);
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .footer-bottom {
-    text-align: center;
-    padding-top: 1.5rem;
+    margin-top: 2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.footer-bottom p {
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
     color: rgba(255, 255, 255, 0.6);
-    font-size: clamp(0.75rem, 1.8vw, 0.8rem);
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .container {
-        padding: 0 0.75rem;
-    }
-    .nav-container {
-        padding: 0 0.75rem;
-    }
-    .hero-section {
-        padding: 5rem 0.75rem 2rem;
-        min-height: 70vh;
-    }
-    .section-header {
-        padding-top: 3.5rem;
-    }
-}
-
 @media (max-width: 991px) {
-    .nav-container {
-        flex-wrap: wrap;
-        padding: 0 0.5rem;
-        gap: 0.5rem;
-    }
     .nav-menu {
         width: 100%;
         flex-direction: column;
         align-items: flex-start;
         padding: 0.5rem 0;
-        display: none;
+        display: none; /* Hidden by default on mobile */
     }
-    .nav-menu.active {
-        display: flex;
+    .nav-menu.show {
+        display: flex; /* Shown when .show is toggled by Bootstrap or JS */
+    }
+    .navbar-nav {
+        width: 100%;
+    }
+    .nav-link {
+        padding: 0.5rem 1rem;
+        width: 100%;
     }
     .nav-actions {
-        width: 100%;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
-    .search-container {
-        max-width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    .hero-content {
-        gap: 1.5rem;
-    }
-    .hero-title {
-        font-size: clamp(1.6rem, 4.5vw, 2.5rem);
-    }
-    .hero-subtitle {
-        font-size: clamp(0.85rem, 2vw, 0.95rem);
-    }
-    .hero-stats {
-        flex-direction: column;
-        align-items: center;
-    }
-    .stat-item {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-    .deals-banner {
-        flex-direction: column;
-        padding: 1.5rem;
-    }
-    .footer-content {
-        gap: 1rem;
+        margin-left: auto;
     }
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0.5rem 0;
-    }
-    .nav-container {
-        padding: 0 0.5rem;
-        gap: 0.4rem;
-    }
-    .nav-link {
-        font-size: clamp(0.75rem, 2vw, 0.85rem);
-    }
-    .search-input {
-        padding: 0.4rem 0.8rem 0.4rem 2rem;
-        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
-    }
-    .search-btn svg {
-        width: 12px;
-        height: 12px;
-    }
-    .cart-btn {
-        padding: 0.4rem;
-    }
-    .cart-btn svg {
-        width: 14px;
-        height: 14px;
-    }
-    .cart-count {
-        width: 16px;
-        height: 16px;
-        font-size: 0.65rem;
-    }
-    .user-profile {
-        padding: 0.3rem;
-        gap: 0.3rem;
-    }
-    .profile-img {
-        width: 24px;
-        height: 24px;
-    }
-    .profile-name {
-        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
-    }
-    .logout-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: clamp(0.7rem, 1.8vw, 0.8rem);
-    }
     .hero-section {
-        padding: 4.5rem 0.5rem 1.5rem;
-        min-height: 65vh;
+        padding: 4rem 1rem 2rem;
+    }
+    .hero-title {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    .hero-subtitle {
+        font-size: clamp(0.85rem, 2vw, 0.9rem);
+    }
+    .stat-item {
+        flex: 1 1 40%;
+    }
+    .deals-content {
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: clamp(1.2rem, 3.5vw, 2rem);
     }
     .hero-buttons {
         flex-direction: column;
-        gap: 0.75rem;
+        align-items: center;
     }
     .btn-primary, .btn-secondary {
         width: 100%;
-        padding: 0.6rem;
+        max-width: 250px;
     }
-    .category-image {
-        height: 160px;
+    .stat-item {
+        flex: 1 1 100%;
     }
-    .product-image {
-        height: 200px;
+    .category-card, .product-card {
+        max-width: 100%;
     }
-    .quick-view-btn, .add-to-cart-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: clamp(0.7rem, 1.8vw, 0.75rem);
+    .deals-banner {
+        padding: 1.5rem;
+    }
+    .timer-item {
+        min-width: 50px;
     }
     .newsletter-form {
         flex-direction: column;
@@ -1151,235 +1085,6 @@ body {
     }
     .newsletter-input {
         width: 100%;
-        min-width: 0;
-    }
-}
-
-@media (max-width: 576px) {
-    .navbar {
-        padding: 0.4rem 0;
-    }
-    .nav-container {
-        padding: 0 0.4rem;
-    }
-    .logo-text {
-        font-size: clamp(0.9rem, 3vw, 1rem);
-    }
-    .logo-subtitle {
-        font-size: clamp(0.45rem, 1.5vw, 0.55rem);
-    }
-    .nav-link {
-        font-size: clamp(0.7rem, 2vw, 0.8rem);
-    }
-    .search-container {
-        max-width: 100%;
-    }
-    .search-input {
-        font-size: clamp(0.65rem, 1.8vw, 0.75rem);
-        padding: 0.3rem 0.6rem 0.3rem 1.8rem;
-    }
-    .search-btn svg {
-        width: 10px;
-        height: 10px;
-    }
-    .cart-btn {
-        padding: 0.3rem;
-    }
-    .cart-btn svg {
-        width: 12px;
-        height: 12px;
-    }
-    .cart-count {
-        width: 14px;
-        height: 14px;
-        font-size: 0.6rem;
-    }
-    .user-profile {
-        padding: 0.25rem;
-    }
-    .profile-img {
-        width: 20px;
-        height: 20px;
-    }
-    .profile-name {
-        display: none;
-    }
-    .logout-btn {
-        padding: 0.3rem 0.6rem;
-        font-size: clamp(0.65rem, 1.8vw, 0.75rem);
-    }
-    .hero-section {
-        padding: 4rem 0.5rem 1rem;
-        min-height: 60vh;
-    }
-    .hero-title {
-        font-size: clamp(1.4rem, 4vw, 2rem);
-    }
-    .hero-subtitle {
-        font-size: clamp(0.8rem, 2vw, 0.9rem);
-    }
-    .stat-item {
-        padding: 0.75rem;
-    }
-    .stat-number {
-        font-size: clamp(1rem, 2.5vw, 1.2rem);
-    }
-    .stat-label {
-        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
-    }
-    .categories-section, .products-section, .deals-section, .newsletter-section {
-        padding: 2rem 0;
-    }
-    .category-image {
-        height: 140px;
-    }
-    .product-image {
-        height: 180px;
-    }
-    .product-badge {
-        top: 0.5rem;
-        left: 0.5rem;
-        padding: 0.3rem 0.6rem;
-        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
-    }
-    .category-content, .product-info {
-        padding: 0.75rem;
-    }
-    .category-content h3, .product-title {
-        font-size: clamp(0.9rem, 2vw, 1rem);
-    }
-    .category-content p, .product-description {
-        font-size: clamp(0.75rem, 1.8vw, 0.8rem);
-    }
-    .category-count, .rating-count {
-        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
-    }
-    .stars {
-        font-size: clamp(0.7rem, 1.5vw, 0.75rem);
-    }
-    .current-price {
-        font-size: clamp(1rem, 2vw, 1.1rem);
-    }
-    .original-price {
-        font-size: clamp(0.8rem, 1.8vw, 0.85rem);
-    }
-    .deals-title {
-        font-size: clamp(1.6rem, 3.5vw, 2rem);
-    }
-    .deals-subtitle {
-        font-size: clamp(0.85rem, 2vw, 0.95rem);
-    }
-    .timer-item {
-        min-width: 50px;
-        padding: 0.5rem;
-    }
-    .timer-number {
-        font-size: clamp(1rem, 2.5vw, 1.2rem);
-    }
-    .timer-label {
-        font-size: clamp(0.65rem, 1.5vw, 0.7rem);
-    }
-    .deals-btn {
-        padding: 0.6rem 1rem;
-        font-size: clamp(0.8rem, 1.8vw, 0.85rem);
-    }
-    .newsletter-title {
-        font-size: clamp(1.6rem, 3.5vw, 2rem);
-    }
-    .newsletter-subtitle {
-        font-size: clamp(0.85rem, 2vw, 0.95rem);
-    }
-}
-
-@media (max-width: 400px) {
-    .container {
-        padding: 0 0.4rem;
-    }
-    .navbar {
-        padding: 0.3rem 0;
-    }
-    .nav-container {
-        padding: 0 0.3rem;
-        gap: 0.3rem;
-    }
-    .logo-text {
-        font-size: clamp(0.8rem, 3vw, 0.9rem);
-    }
-    .logo-subtitle {
-        font-size: clamp(0.4rem, 1.5vw, 0.5rem);
-    }
-    .search-input {
-        padding: 0.3rem 0.6rem 0.3rem 1.6rem;
-        font-size: clamp(0.6rem, 1.8vw, 0.7rem);
-    }
-    .search-btn svg {
-        width: 10px;
-        height: 10px;
-    }
-    .cart-btn {
-        padding: 0.25rem;
-    }
-    .cart-btn svg {
-        width: 10px;
-        height: 10px;
-    }
-    .cart-count {
-        width: 12px;
-        height: 12px;
-        font-size: 0.55rem;
-    }
-    .user-profile {
-        padding: 0.2rem;
-    }
-    .profile-img {
-        width: 18px;
-        height: 18px;
-    }
-    .logout-btn {
-        padding: 0.3rem 0.5rem;
-        font-size: clamp(0.6rem, 1.8vw, 0.7rem);
-    }
-    .hero-section {
-        padding: 3.5rem 0.4rem 1rem;
-        min-height: 55vh;
-    }
-    .hero-title {
-        font-size: clamp(1.2rem, 4vw, 1.8rem);
-    }
-    .hero-subtitle {
-        font-size: clamp(0.75rem, 2vw, 0.85rem);
-    }
-    .stat-item {
-        padding: 0.5rem;
-    }
-    .stat-number {
-        font-size: clamp(0.9rem, 2vw, 1rem);
-    }
-    .stat-label {
-        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
-    }
-    .category-image {
-        height: 130px;
-    }
-    .product-image {
-        height: 160px;
-    }
-    .quick-view-btn, .add-to-cart-btn {
-        padding: 0.3rem 0.6rem;
-        font-size: clamp(0.65rem, 1.8vw, 0.7rem);
-    }
-    .product-badge {
-        padding: 0.2rem 0.4rem;
-        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
-    }
-    .timer-item {
-        min-width: 45px;
-        padding: 0.4rem;
-    }
-    .timer-number {
-        font-size: clamp(0.9rem, 2vw, 1rem);
-    }
-    .timer-label {
-        font-size: clamp(0.6rem, 1.5vw, 0.65rem);
+        max-width: 300px;
     }
 }
